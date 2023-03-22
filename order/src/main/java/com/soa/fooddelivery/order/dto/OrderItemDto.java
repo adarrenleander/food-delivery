@@ -1,5 +1,6 @@
 package com.soa.fooddelivery.order.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
@@ -7,10 +8,10 @@ import lombok.Setter;
 
 /**
  * {
- *   "name": "xxx",
- *   "address": "xxx",  // should split this up if time allows
- *   "phoneNumber": "xxx",
- *   "time": "yyyy-MM-dd hh:mm:ss"
+ *   "menuItemId": "xxx",
+ *   "quantity": 1,
+ *   "notes": "xxx",
+ *   "price": 2
  * }
  */
 
@@ -18,10 +19,9 @@ import lombok.Setter;
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class DeliveryDto {
-    private String name;
-    private String address;
-    private String phoneNumber;
-    private String time;
-
+public class OrderItemDto {
+    private String menuItemId;
+    private Integer quantity;
+    private String notes;
+    private Float price;
 }
