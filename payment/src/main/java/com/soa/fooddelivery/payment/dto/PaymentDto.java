@@ -1,24 +1,22 @@
-package com.soa.fooddelivery.notification.dto;
+package com.soa.fooddelivery.payment.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * {
+ *   "orderId": "xxx",
  *   "userId": "xxx",
- *   "notificationId": "xxx",
- *   "status": "success"
+ *   "totalAmount": 15
  * }
  */
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class NotificationDto {
+public class PaymentDto {
+    private String orderId;
     private String userId;
-    private String notificationId;
-    private String status;  // only used in response -> success / failed
+    private Float totalAmount;
 }
