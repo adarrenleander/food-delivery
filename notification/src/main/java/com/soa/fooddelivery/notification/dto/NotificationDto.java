@@ -1,0 +1,24 @@
+package com.soa.fooddelivery.notification.dto;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Getter;
+import lombok.Setter;
+
+/**
+ * {
+ *   "userId": "xxx",
+ *   "notificationId": "xxx",
+ *   "status": "success"
+ * }
+ */
+
+@Setter
+@Getter
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class NotificationDto {
+    private String userId;
+    private String notificationId;
+    private String status;  // only used in response -> success / failed
+}

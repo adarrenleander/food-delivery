@@ -27,7 +27,7 @@ public class OrderController {
 
     @GetMapping("/orders/{userId}")
     public ResponseEntity<OrderDto[]> getOrdersHistory(@PathVariable(name = "userId") String userId) {
-        OrderDto order = getSampleFullOrder();
+        OrderDto order = getDummyFullOrder();
         order.setUserId(userId);
         OrderDto[] response = {order, order, order};
         return ResponseEntity.ok().body(response);
@@ -35,7 +35,7 @@ public class OrderController {
 
     @GetMapping("/order/{orderId}")
     public ResponseEntity<OrderDto> getOrder(@PathVariable(name = "orderId") String orderId) {
-        OrderDto response = getSampleFullOrder();
+        OrderDto response = getDummyFullOrder();
         response.setOrderId(orderId);
         return ResponseEntity.ok().body(response);
     }
@@ -48,7 +48,7 @@ public class OrderController {
         return ResponseEntity.ok().body(response);
     }
 
-    public OrderDto getSampleFullOrder() {
+    public OrderDto getDummyFullOrder() {
         DeliveryDto delivery = new DeliveryDto();
         delivery.setName("name");
         delivery.setPhoneNumber("+31123456");
@@ -69,14 +69,14 @@ public class OrderController {
 
         OrderItemDto[] orders = {order1, order2};
 
-        OrderDto response = new OrderDto();
-        response.setOrderId("xxx");
-        response.setUserId("xxx");
-        response.setRestaurantId("xxx");
-        response.setStatus("completed");
-        response.setTotalAmount(15F);
-        response.setOrders(orders);
-        response.setDelivery(delivery);
-        return response;
+        OrderDto order = new OrderDto();
+        order.setOrderId("xxx");
+        order.setUserId("xxx");
+        order.setRestaurantId("xxx");
+        order.setStatus("completed");
+        order.setTotalAmount(15F);
+        order.setOrders(orders);
+        order.setDelivery(delivery);
+        return order;
     }
 }
