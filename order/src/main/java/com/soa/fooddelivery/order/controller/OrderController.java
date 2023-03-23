@@ -1,16 +1,34 @@
 package com.soa.fooddelivery.order.controller;
 
-import com.soa.fooddelivery.order.dto.DeliveryDto;
-import com.soa.fooddelivery.order.dto.OrderDto;
-import com.soa.fooddelivery.order.dto.OrderItemDto;
+import com.soa.fooddelivery.order.dto.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 @RestController
 public class OrderController {
 
+//    @Autowired
+//    private JmsTemplate jmsTemplate;
+
+    @Autowired private RestTemplateBuilder restTemplateBuilder;
     @PostMapping("/order")
     public ResponseEntity<OrderDto> createOrder(@RequestBody OrderDto request) {
+//        jmsTemplate.convertAndSend("notify-order-placed", "");
+
+        RestTemplate restTemplate = restTemplateBuilder.build();
+
+        PaymentRequestDto req = new PaymentRequestDto();
+        req.setOrderId("xxx");
+        req.setUserId(request.getUserId());
+        req.setTotalAmount(request.getTotalAmount());
+        PaymentResponseDto res = restTemplate.postForObject("http://localhost:8084/pay", req, PaymentResponseDto.class); // this should change to payment
+        System.out.println(res.getTransactionId());
+        System.out.println(res.getStatus());
+
         OrderDto response = new OrderDto();
         response.setOrderId("xxx");
         response.setStatus("placed");
