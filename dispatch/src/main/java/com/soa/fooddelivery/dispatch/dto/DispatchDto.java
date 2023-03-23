@@ -30,7 +30,7 @@ public class DispatchDto {
     private String orderId;
     private String dispatchId;  // only used in response
     private String driverId;
-    private String status;  // created / finding driver / accepted / delivered / rejected
+    private String status;  // created / finding driver / accepted / on delivery / delivered / rejected
     private DispatchDetailsDto restaurant;
     private DispatchDetailsDto receiver;
     private String time;

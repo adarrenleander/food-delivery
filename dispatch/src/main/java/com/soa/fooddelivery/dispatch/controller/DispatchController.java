@@ -39,4 +39,12 @@ public class DispatchController {
         response.setStatus(request.getStatus());
         return ResponseEntity.ok().body(response);
     }
+
+    @GetMapping("/dispatch/{dispatchId}/status")
+    public ResponseEntity<DispatchDto> getDispatchStatus(@PathVariable(name = "dispatchId") String dispatchId) {
+        DispatchDto response = new DispatchDto();
+        response.setDispatchId(dispatchId);
+        response.setStatus("on delivery");
+        return ResponseEntity.ok().body(response);
+    }
 }
