@@ -1,4 +1,4 @@
-package com.soa.fooddelivery.order.dto;
+package com.soa.fooddelivery.dispatch.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -7,19 +7,16 @@ import lombok.Data;
 /**
  * {
  *   "name": "xxx",
- *   "address": "xxx",  // should split this up if time allows
- *   "phoneNumber": "xxx",
- *   "time": "yyyy-MM-dd hh:mm:ss"
+ *   "address": "xxx",
+ *   "phoneNumber": "xxx"
  * }
  */
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class DeliveryDto {
+public class DispatchDetailsDto {
     private String name;
     private String address;
     private String phoneNumber;
-    private String time;
-
 }
