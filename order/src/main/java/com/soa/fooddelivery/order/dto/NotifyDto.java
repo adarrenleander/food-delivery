@@ -5,26 +5,16 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * {
- *   "orderId": "xxx",
  *   "userId": "xxx",
- *   "totalAmount": 15
+ *   "notificationId": "xxx"
  * }
  */
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class PaymentRequestDto {
-    private String orderId;
+public class NotifyDto {
     private String userId;
-    private Float totalAmount;
-
-    public String getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
-    }
+    private String notificationId;
 
     public String getUserId() {
         return userId;
@@ -34,11 +24,11 @@ public class PaymentRequestDto {
         this.userId = userId;
     }
 
-    public Float getTotalAmount() {
-        return totalAmount;
+    public String getNotificationId() {
+        return notificationId;
     }
 
-    public void setTotalAmount(Float totalAmount) {
-        this.totalAmount = totalAmount;
+    public void setNotificationId(String notificationId) {
+        this.notificationId = notificationId;
     }
 }

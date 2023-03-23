@@ -11,16 +11,17 @@ import org.springframework.web.client.RestTemplate;
 @RestController
 public class OrderController {
 
-//    @Autowired
-//    private JmsTemplate jmsTemplate;
-
+    @Autowired private JmsTemplate jmsTemplate;
     @Autowired private RestTemplateBuilder restTemplateBuilder;
+
     @PostMapping("/order")
     public ResponseEntity<OrderDto> createOrder(@RequestBody OrderDto request) {
-//        jmsTemplate.convertAndSend("notify-order-placed", "");
+        NotifyDto pubReq = new NotifyDto();
+        pubReq.setUserId(request.getUserId());
+        pubReq.setNotificationId("xxx");
+        jmsTemplate.convertAndSend("notify-order-placed", pubReq);
 
         RestTemplate restTemplate = restTemplateBuilder.build();
-
         PaymentRequestDto req = new PaymentRequestDto();
         req.setOrderId("xxx");
         req.setUserId(request.getUserId());
