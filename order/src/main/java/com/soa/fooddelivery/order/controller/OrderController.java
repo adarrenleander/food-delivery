@@ -1,9 +1,13 @@
 package com.soa.fooddelivery.order.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soa.fooddelivery.order.dto.*;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -12,13 +16,16 @@ public class OrderController {
 
     @Autowired private JmsTemplate jmsTemplate;
     @Autowired private RestTemplateBuilder restTemplateBuilder;
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(OrderController.class);
+
 
     @PostMapping("/order")
-    public ResponseEntity<OrderDto> createOrder(@RequestBody OrderDto request) {
+    public ResponseEntity<OrderDto> createOrder(@RequestBody OrderDto request) throws JsonProcessingException {
         NotifyDto pubReq = new NotifyDto();
         pubReq.setUserId(request.getUserId());
         pubReq.setNotificationId("xxx");
-        jmsTemplate.convertAndSend("notify-order-placed", pubReq);
+        ObjectMapper mapper = new ObjectMapper();
+        jmsTemplate.convertAndSend("notify-order-placed", mapper.writeValueAsString(pubReq));
 
         RestTemplate restTemplate = restTemplateBuilder.build();
         PaymentRequestDto req = new PaymentRequestDto();
@@ -26,8 +33,7 @@ public class OrderController {
         req.setUserId(request.getUserId());
         req.setTotalAmount(request.getTotalAmount());
         PaymentResponseDto res = restTemplate.postForObject("http://localhost:8084/pay", req, PaymentResponseDto.class); // this should change to payment
-        System.out.println(res.getTransactionId());
-        System.out.println(res.getStatus());
+        log.info("PAYMENT order:" + req.getOrderId() + ", transaction:" + res.getTransactionId() + ", status:" + res.getStatus());
 
         OrderDto response = new OrderDto();
         response.setOrderId("xxx");
