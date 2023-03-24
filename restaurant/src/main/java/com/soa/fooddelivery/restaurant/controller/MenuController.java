@@ -90,13 +90,6 @@ public class MenuController {
         return ResponseEntity.ok().body(response);
     }
 
-    @GetMapping("/menuItem")
-    public ResponseEntity<List<MenuItemDto>> getAllMenuItem(){
-        //TODO: filter only the active one (also check the menu category active status)
-        List<MenuItemDto> response = getSampleFullMenuItem();
-        return ResponseEntity.ok().body(response);
-    }
-
     @GetMapping("/menuItem/{id}")
     public ResponseEntity<MenuItemDto> getMenuItemById(@PathVariable(name = "id") String id){
         List<MenuItemDto> menus = getSampleFullMenuItem();

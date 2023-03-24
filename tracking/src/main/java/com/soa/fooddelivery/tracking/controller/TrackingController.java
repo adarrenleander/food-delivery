@@ -14,5 +14,4 @@ public class TrackingController {
         response.setDriverId("xxx");
         return ResponseEntity.ok().body(response);
     }
-    // what is this api for?
 }
