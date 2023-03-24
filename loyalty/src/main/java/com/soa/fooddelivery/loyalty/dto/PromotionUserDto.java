@@ -1,4 +1,5 @@
-package com.soa.fooddelivery.promotion.dto;
+package com.soa.fooddelivery.loyalty.dto;
+
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -11,6 +12,6 @@ import org.apache.catalina.User;
 public class PromotionUserDto {
     private PromotionDto promotion;
     private UserDto user;
-    private Boolean activeStatus;
     private Float totalAmount;
 }
+

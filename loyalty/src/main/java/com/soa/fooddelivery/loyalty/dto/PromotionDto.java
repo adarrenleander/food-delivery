@@ -1,4 +1,4 @@
-package com.soa.fooddelivery.promotion.dto;
+package com.soa.fooddelivery.loyalty.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;

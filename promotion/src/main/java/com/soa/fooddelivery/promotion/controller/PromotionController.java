@@ -91,20 +91,29 @@ public class PromotionController {
         return ResponseEntity.ok().body(response);
     }
 
+    @PostMapping("/promotion/grant")
+    public ResponseEntity<PromotionUserDto> grantPromotion(@RequestBody PromotionUserDto request){
+        PromotionUserDto promotionUser = new PromotionUserDto();
+        promotionUser.setPromotion(new PromotionDto("123","ABC123",(float)30, true,14));
+        promotionUser.setUser(new UserDto("1234", "Juwita", "Pasaribu", "customer", true));
+        promotionUser.setActiveStatus(true);
+        return ResponseEntity.ok().body(promotionUser);
+    }
+
+    @PostMapping("/promotion/apply")
+    public ResponseEntity<PromotionUserDto> applyPromotion(@RequestBody PromotionUserDto request){
+        PromotionUserDto promotionUser = new PromotionUserDto();
+        promotionUser.setPromotion(new PromotionDto("123","ABC123",(float)30, true,14));
+        promotionUser.setUser(new UserDto("1234", "Juwita", "Pasaribu", "customer", true));
+        promotionUser.setActiveStatus(false);
+        return ResponseEntity.ok().body(promotionUser);
+    }
+
     public List<PromotionDto> getSampleFullPromotion() {
         List<PromotionDto> response = new ArrayList<>();
-        PromotionDto promotion1 = new PromotionDto();
-        promotion1.setId("123");
-        promotion1.setDiscount((float)30);
-        promotion1.setCode("ABC123");
-        PromotionDto promotion2 = new PromotionDto();
-        promotion2.setId("1235");
-        promotion2.setDiscount((float)40);
-        promotion2.setCode("ABC1234");
-        PromotionDto promotion3 = new PromotionDto();
-        promotion3.setId("1234");
-        promotion3.setDiscount((float)50);
-        promotion3.setCode("ABC1235");
+        PromotionDto promotion1 = new PromotionDto("123","ABC123",(float)30, true,12);
+        PromotionDto promotion2 = new PromotionDto("124","ABC1234",(float)40, true,13);
+        PromotionDto promotion3 = new PromotionDto("125","ABC12345",(float)60, true,20);
         response.add(promotion1);
         response.add(promotion2);
         response.add(promotion3);
