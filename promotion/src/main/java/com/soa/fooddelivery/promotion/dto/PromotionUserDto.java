@@ -13,4 +13,5 @@ public class PromotionUserDto {
     private UserDto user;
     private Boolean activeStatus;
     private Float totalAmount;
+    private String usageStatus; // success / failed
 }

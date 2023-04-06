@@ -3,9 +3,11 @@ package com.soa.fooddelivery.order.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soa.fooddelivery.order.dto.*;
+import com.soa.fooddelivery.order.service.OrderService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -13,31 +15,13 @@ import org.springframework.web.client.RestTemplate;
 
 @RestController
 public class OrderController {
-
-    @Autowired private JmsTemplate jmsTemplate;
-    @Autowired private RestTemplateBuilder restTemplateBuilder;
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(OrderController.class);
-
+    @Autowired private OrderService orderService;
 
     @PostMapping("/order")
-    public ResponseEntity<OrderDto> createOrder(@RequestBody OrderDto request) throws JsonProcessingException {
-        NotifyDto pubReq = new NotifyDto();
-        pubReq.setUserId(request.getUserId());
-        pubReq.setNotificationId("xxx");
-        ObjectMapper mapper = new ObjectMapper();
-        jmsTemplate.convertAndSend("notify-order-placed", mapper.writeValueAsString(pubReq));
-
-        RestTemplate restTemplate = restTemplateBuilder.build();
-        PaymentRequestDto req = new PaymentRequestDto();
-        req.setOrderId("xxx");
-        req.setUserId(request.getUserId());
-        req.setTotalAmount(request.getTotalAmount());
-        PaymentResponseDto res = restTemplate.postForObject("http://localhost:8084/pay", req, PaymentResponseDto.class); // this should change to payment
-        log.info("PAYMENT order:" + req.getOrderId() + ", transaction:" + res.getTransactionId() + ", status:" + res.getStatus());
-
-        OrderDto response = new OrderDto();
-        response.setOrderId("xxx");
-        response.setStatus("placed");
+    public ResponseEntity<OrderDto> createOrder(@RequestBody OrderDto request) {
+        log.debug("POST /order createOrder");
+        OrderDto response = orderService.createOrder(request);
         return ResponseEntity.ok().body(response);
     }
 

@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  *   "orderId": "xxx",
  *   "userId": "xxx",
  *   "restaurantId": "xxx",
+ *   "promotionCode": "xxx",
  *   "status": "placed",
  *   "totalAmount": 12,
  *   "orders": [
@@ -39,7 +40,8 @@ public class OrderDto {
     private String orderId;
     private String userId;
     private String restaurantId;
-    private String status;  // placed / completed / canceled
+    private String promotionCode;
+    private String status;  // created / placed / completed / canceled / failed
     private Float totalAmount;
     private OrderItemDto[] orders;
     private DeliveryDto delivery;
@@ -98,5 +100,13 @@ public class OrderDto {
 
     public void setDelivery(DeliveryDto delivery) {
         this.delivery = delivery;
+    }
+
+    public String getPromotionCode() {
+        return promotionCode;
+    }
+
+    public void setPromotionCode(String promotionCode) {
+        this.promotionCode = promotionCode;
     }
 }

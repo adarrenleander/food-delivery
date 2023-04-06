@@ -6,15 +6,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 /**
  * {
  *   "transactionId": "xxx",
- *   "status": "success"
+ *   "userId": "xxx",
+ *   "refundAmount": 15
  * }
  */
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class PaymentResponseDto {
+public class RefundDto {
     private String transactionId;
-    private String status;
+    private String userId;
+    private Float refundAmount;
 
     public String getTransactionId() {
         return transactionId;
@@ -24,11 +26,19 @@ public class PaymentResponseDto {
         this.transactionId = transactionId;
     }
 
-    public String getStatus() {
-        return status;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public Float getRefundAmount() {
+        return refundAmount;
+    }
+
+    public void setRefundAmount(Float refundAmount) {
+        this.refundAmount = refundAmount;
     }
 }

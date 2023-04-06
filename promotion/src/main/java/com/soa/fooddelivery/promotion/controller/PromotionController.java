@@ -21,7 +21,7 @@ public class PromotionController {
 
     @Autowired
     private RestTemplateBuilder restTemplateBuilder;
-    @GetMapping("/promotion/eligibility")
+    @PostMapping("/promotion/eligibility")
     public ResponseEntity<Object> checkPromotionEligibility(@RequestBody PromotionUserDto request) {
         Map<String, Object> result = new HashMap<String, Object>();
         RestTemplate restTemplate = restTemplateBuilder.build();
@@ -38,6 +38,8 @@ public class PromotionController {
 
         DecimalFormat f = new DecimalFormat("##.00");
 
+        request.getPromotion().setDiscount(10F);
+        request.getPromotion().setActiveStatus(true);
         result.put("eligibility", request.getPromotion().getActiveStatus());
         result.put("finalAmount", f.format(request.getTotalAmount()-(request.getTotalAmount()*request.getPromotion().getDiscount()*0.01)));
         return ResponseEntity.ok().body(result);
@@ -80,7 +82,7 @@ public class PromotionController {
     }
 
     @GetMapping("/promotion/{id}")
-    public ResponseEntity<PromotionDto> getMenuItemById(@PathVariable(name = "id") String id){
+    public ResponseEntity<PromotionDto> getPromotionById(@PathVariable(name = "id") String id){
         List<PromotionDto> promotions = getSampleFullPromotion();
         PromotionDto response = new PromotionDto();
         for (PromotionDto promotion : promotions){
@@ -105,7 +107,7 @@ public class PromotionController {
         PromotionUserDto promotionUser = new PromotionUserDto();
         promotionUser.setPromotion(new PromotionDto("123","ABC123",(float)30, true,14));
         promotionUser.setUser(new UserDto("1234", "Juwita", "Pasaribu", "customer", true));
-        promotionUser.setActiveStatus(false);
+        promotionUser.setUsageStatus("success");
         return ResponseEntity.ok().body(promotionUser);
     }
 
