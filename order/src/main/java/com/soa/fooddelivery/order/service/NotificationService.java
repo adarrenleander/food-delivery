@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class NotificationService {
-    private static final Logger log = org.slf4j.LoggerFactory.getLogger(PaymentService.class);
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(NotificationService.class);
     @Autowired private JmsTemplate jmsTemplate;
 
     public void sendNotification(String destination, String notificationId, String userId) {
