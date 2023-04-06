@@ -1,17 +1,11 @@
 package com.soa.fooddelivery.order.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soa.fooddelivery.order.dto.*;
 import com.soa.fooddelivery.order.service.OrderService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 @RestController
 public class OrderController {
@@ -27,64 +21,29 @@ public class OrderController {
 
     @PutMapping("/order")
     public ResponseEntity<OrderDto> updateOrderStatus(@RequestBody OrderDto request) {
-        OrderDto response = new OrderDto();
-        response.setOrderId(request.getOrderId());
-        response.setStatus("completed");
+        log.debug("PUT /order updateOrderStatus");
+        OrderDto response = orderService.updateOrderStatus(request);
         return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/orders/{userId}")
     public ResponseEntity<OrderDto[]> getOrdersHistory(@PathVariable(name = "userId") String userId) {
-        OrderDto order = getDummyFullOrder();
-        order.setUserId(userId);
-        OrderDto[] response = {order, order, order};
+        log.debug("GET /orders/{userId} getOrdersHistory");
+        OrderDto[] response = orderService.getOrdersHistory(userId);
         return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/order/{orderId}")
     public ResponseEntity<OrderDto> getOrder(@PathVariable(name = "orderId") String orderId) {
-        OrderDto response = getDummyFullOrder();
-        response.setOrderId(orderId);
+        log.debug("GET /order/{orderId} getOrder");
+        OrderDto response = orderService.getOrder(orderId);
         return ResponseEntity.ok().body(response);
     }
 
     @DeleteMapping("/order/{orderId}")
     public ResponseEntity<OrderDto> cancelOrder(@PathVariable(name = "orderId") String orderId) {
-        OrderDto response = new OrderDto();
-        response.setOrderId(orderId);
-        response.setStatus("canceled");
+        log.debug("DELETE /order/{orderId} cancelOrder");
+        OrderDto response = orderService.cancelOrder(orderId);
         return ResponseEntity.ok().body(response);
-    }
-
-    public OrderDto getDummyFullOrder() {
-        DeliveryDto delivery = new DeliveryDto();
-        delivery.setName("name");
-        delivery.setPhoneNumber("+31123456");
-        delivery.setTime("2023-03-22 15:30");
-        delivery.setAddress("Drienerlolaan 5, 7522 NB Enschede");
-
-        OrderItemDto order1 = new OrderItemDto();
-        order1.setMenuItemId("xxx");
-        order1.setPrice(5F);
-        order1.setQuantity(1);
-        order1.setNotes("");
-
-        OrderItemDto order2 = new OrderItemDto();
-        order2.setMenuItemId("xxx");
-        order2.setPrice(10F);
-        order2.setQuantity(1);
-        order2.setNotes("");
-
-        OrderItemDto[] orders = {order1, order2};
-
-        OrderDto order = new OrderDto();
-        order.setOrderId("xxx");
-        order.setUserId("xxx");
-        order.setRestaurantId("xxx");
-        order.setStatus("completed");
-        order.setTotalAmount(15F);
-        order.setOrders(orders);
-        order.setDelivery(delivery);
-        return order;
     }
 }

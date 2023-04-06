@@ -61,4 +61,70 @@ public class OrderService {
         response.setStatus("placed");
         return response;
     }
+
+    public OrderDto updateOrderStatus(OrderDto request) {
+        // TODO: update the order status in DB according to status and orderId in request
+
+        OrderDto response = new OrderDto();
+        response.setOrderId(request.getOrderId());
+        response.setStatus("completed");
+        return response;
+    }
+
+    public OrderDto[] getOrdersHistory(String userId) {
+        // TODO: query all orders from DB descending by date
+
+        OrderDto order = getDummyFullOrder();
+        order.setUserId(userId);
+        return new OrderDto[]{order, order, order};
+    }
+
+    public OrderDto getOrder(String orderId) {
+        // TODO: query order by orderId to DB
+
+        OrderDto response = getDummyFullOrder();
+        response.setOrderId(orderId);
+        return response;
+    }
+
+    public OrderDto cancelOrder(String orderId) {
+        // TODO: set order status to canceled in DB
+
+        OrderDto response = new OrderDto();
+        response.setOrderId(orderId);
+        response.setStatus("canceled");
+        return response;
+    }
+
+    public OrderDto getDummyFullOrder() {
+        DeliveryDto delivery = new DeliveryDto();
+        delivery.setName("name");
+        delivery.setPhoneNumber("+31123456");
+        delivery.setTime("2023-03-22 15:30");
+        delivery.setAddress("Drienerlolaan 5, 7522 NB Enschede");
+
+        OrderItemDto order1 = new OrderItemDto();
+        order1.setMenuItemId("xxx");
+        order1.setPrice(5F);
+        order1.setQuantity(1);
+        order1.setNotes("");
+
+        OrderItemDto order2 = new OrderItemDto();
+        order2.setMenuItemId("xxx");
+        order2.setPrice(10F);
+        order2.setQuantity(1);
+        order2.setNotes("");
+
+        OrderItemDto[] orders = {order1, order2};
+
+        OrderDto order = new OrderDto();
+        order.setOrderId("xxx");
+        order.setUserId("xxx");
+        order.setRestaurantId("xxx");
+        order.setStatus("completed");
+        order.setTotalAmount(15F);
+        order.setOrders(orders);
+        order.setDelivery(delivery);
+        return order;
+    }
 }
