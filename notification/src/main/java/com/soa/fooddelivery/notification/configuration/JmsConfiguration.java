@@ -3,6 +3,7 @@ package com.soa.fooddelivery.notification.configuration;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ResourceLoader;
@@ -21,6 +22,9 @@ public class JmsConfiguration {
     public JmsConfiguration(ResourceLoader resourceLoader) {
         this.resourceLoader = resourceLoader;
     }
+    @Value("${mq.url}") private String brokerUrl;
+    @Value("${mq.username}") private String brokerUsername;
+    @Value("${mq.password}") private String brokerPassword;
 
     /**
      * Connect JMS to an external ActiveMQ session, based on the active.broker-url of application.properties
@@ -28,10 +32,6 @@ public class JmsConfiguration {
     @Bean
     public ActiveMQConnectionFactory activeMQConnectionFactory() {
         ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory();
-
-        String brokerUrl = "tcp://localhost:61616";
-        String brokerUsername = "admin";
-        String brokerPassword = "admin";
 
         activeMQConnectionFactory.setBrokerURL(brokerUrl);
         log.info("Connect to ActiveMQ host: {}", brokerUrl);
