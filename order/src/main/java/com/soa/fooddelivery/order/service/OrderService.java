@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class OrderService {
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(OrderService.class);
-    @Value("${notify.topic.order-placed}") private String notifyTopicOrderPlaced;
+    @Value("${mq.topic.order-placed}") private String mqTopicOrderPlaced;
     @Autowired private PromotionService promotionService;
     @Autowired private PaymentService paymentService;
     @Autowired private DispatchService dispatchService;
@@ -56,7 +56,7 @@ public class OrderService {
 
         // TODO: update order status to placed
 
-        notificationService.sendNotification(notifyTopicOrderPlaced, "xxx", request.getUserId());
+        notificationService.sendNotification(mqTopicOrderPlaced, "xxx", request.getUserId());
 
         response.setStatus("placed");
         return response;

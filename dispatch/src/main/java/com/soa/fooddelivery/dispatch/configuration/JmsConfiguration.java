@@ -1,5 +1,6 @@
-package com.soa.fooddelivery.order.configuration;
+package com.soa.fooddelivery.dispatch.configuration;
 
+import org.apache.activemq.ActiveMQConnectionFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +12,6 @@ import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
-import org.apache.activemq.ActiveMQConnectionFactory;
 
 @EnableJms
 @Configuration
