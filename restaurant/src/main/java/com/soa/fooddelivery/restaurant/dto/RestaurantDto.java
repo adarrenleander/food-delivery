@@ -8,11 +8,11 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RestaurantDto {
-    private String id;
+    private Integer id;
     private String name;
     private String address;
 
-    public RestaurantDto(String id, String name, String address) {
+    public RestaurantDto(Integer id, String name, String address) {
         this.id = id;
         this.name = name;
         this.address = address;

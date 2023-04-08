@@ -10,7 +10,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class MenuDto {
-    private String id;
+    private Integer id;
     private String name;
     private String detail;
     private RestaurantDto restaurant;
@@ -20,7 +20,7 @@ public class MenuDto {
     public MenuDto() {
     }
 
-    public MenuDto(String id, String name, String detail, Boolean activeStatus) {
+    public MenuDto(Integer id, String name, String detail, Boolean activeStatus) {
         this.id = id;
         this.name = name;
         this.detail = detail;

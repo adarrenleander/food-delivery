@@ -8,11 +8,22 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class MenuItemDto {
-    private String id;
+    private Integer id;
     private String name;
     private Float price;
     private String detail;
     private MenuDto menu;
     private Boolean ActiveStatus;
+
+    public MenuItemDto() {
+    }
+
+    public MenuItemDto(Integer id, String name, Float price, String detail, Boolean activeStatus) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.detail = detail;
+        this.ActiveStatus = activeStatus;
+    }
 }
 
