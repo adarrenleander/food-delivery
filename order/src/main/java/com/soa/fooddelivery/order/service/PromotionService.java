@@ -11,8 +11,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class PromotionService {
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(PromotionService.class);
-    @Autowired
-    private PromotionConfiguration promotionConfiguration;
+    @Autowired private PromotionConfiguration promotionConfiguration;
     @Autowired private RestTemplateBuilder restTemplateBuilder;
 
     public PromotionEligibilityDto checkPromotionEligiblity(OrderDto order) {
