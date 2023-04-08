@@ -1,9 +1,7 @@
 package com.soa.fooddelivery.restaurant.repository;
 
 import com.soa.fooddelivery.restaurant.dto.MenuDto;
-import com.soa.fooddelivery.restaurant.dto.RestaurantDto;
 import com.soa.fooddelivery.restaurant.entity.Menu;
-import com.soa.fooddelivery.restaurant.entity.Restaurant;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
