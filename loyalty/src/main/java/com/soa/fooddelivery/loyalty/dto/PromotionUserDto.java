@@ -12,6 +12,6 @@ import org.apache.catalina.User;
 public class PromotionUserDto {
     private PromotionDto promotion;
     private UserDto user;
-    private Float totalAmount;
+    private Boolean activeStatus;
 }
 

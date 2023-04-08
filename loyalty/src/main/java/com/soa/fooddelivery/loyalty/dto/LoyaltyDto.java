@@ -8,6 +8,8 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class LoyaltyDto {
+    private PromotionDto promotion;
     private UserDto user;
     private Integer loyaltyPoint;
+    private String redeemStatus;
 }
