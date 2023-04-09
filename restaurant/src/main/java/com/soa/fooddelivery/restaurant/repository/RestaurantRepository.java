@@ -15,9 +15,9 @@ public interface RestaurantRepository extends CrudRepository<Restaurant, String>
 
     List<Restaurant> findAllById(@Param("id") Integer id);
 
-    @Query("SELECT new com.soa.fooddelivery.restaurant.dto.RestaurantDto(r.id, r.name, r.address) FROM Restaurant r ORDER BY r.name DESC")
+    @Query("SELECT new com.soa.fooddelivery.restaurant.dto.RestaurantDto(r.id, r.name, r.address, r.phoneNumber) FROM Restaurant r ORDER BY r.name DESC")
     List<RestaurantDto> findAllOrderByName();
 
-    @Query("SELECT new com.soa.fooddelivery.restaurant.dto.RestaurantDto(r.id, r.name, r.address) FROM Restaurant r WHERE r.id=:id")
+    @Query("SELECT new com.soa.fooddelivery.restaurant.dto.RestaurantDto(r.id, r.name, r.address, r.phoneNumber) FROM Restaurant r WHERE r.id=:id")
     RestaurantDto findDtoById(@Param("id") Integer id);
 }

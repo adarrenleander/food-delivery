@@ -11,11 +11,13 @@ public class RestaurantDto {
     private Integer id;
     private String name;
     private String address;
+    private String phoneNumber;
 
-    public RestaurantDto(Integer id, String name, String address) {
+    public RestaurantDto(Integer id, String name, String address, String phoneNumber) {
         this.id = id;
         this.name = name;
         this.address = address;
+        this.phoneNumber = phoneNumber;
     }
 
     public RestaurantDto() {

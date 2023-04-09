@@ -3,6 +3,8 @@ package com.soa.fooddelivery.order.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.util.List;
+
 /**
  * {
  *   "orderId": "xxx",
@@ -37,36 +39,36 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class OrderDto {
-    private String orderId;
-    private String userId;
-    private String restaurantId;
+    private Integer orderId;
+    private Integer userId;
+    private Integer restaurantId;
     private String promotionCode;
     private String status;  // created / placed / completed / canceled / failed
     private Float totalAmount;
-    private OrderItemDto[] orders;
+    private List<OrderItemDto> orders;
     private DeliveryDto delivery;
 
-    public String getOrderId() {
+    public Integer getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(String orderId) {
+    public void setOrderId(Integer orderId) {
         this.orderId = orderId;
     }
 
-    public String getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
-    public String getRestaurantId() {
+    public Integer getRestaurantId() {
         return restaurantId;
     }
 
-    public void setRestaurantId(String restaurantId) {
+    public void setRestaurantId(Integer restaurantId) {
         this.restaurantId = restaurantId;
     }
 
@@ -86,11 +88,11 @@ public class OrderDto {
         this.totalAmount = totalAmount;
     }
 
-    public OrderItemDto[] getOrders() {
+    public List<OrderItemDto> getOrders() {
         return orders;
     }
 
-    public void setOrders(OrderItemDto[] orders) {
+    public void setOrders(List<OrderItemDto> orders) {
         this.orders = orders;
     }
 
@@ -108,5 +110,24 @@ public class OrderDto {
 
     public void setPromotionCode(String promotionCode) {
         this.promotionCode = promotionCode;
+    }
+
+    public OrderDto() {
+    }
+
+    public OrderDto(Integer orderId, String status) {
+        this.orderId = orderId;
+        this.status = status;
+    }
+
+    public OrderDto(Integer orderId, Integer userId, Integer restaurantId, String promotionCode, String status, Float totalAmount, List<OrderItemDto> orders, DeliveryDto delivery) {
+        this.orderId = orderId;
+        this.userId = userId;
+        this.restaurantId = restaurantId;
+        this.promotionCode = promotionCode;
+        this.status = status;
+        this.totalAmount = totalAmount;
+        this.orders = orders;
+        this.delivery = delivery;
     }
 }

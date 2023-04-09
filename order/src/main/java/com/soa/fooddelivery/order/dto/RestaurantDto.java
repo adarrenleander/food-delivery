@@ -3,22 +3,21 @@ package com.soa.fooddelivery.order.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-/**
- * {
- *   "name": "xxx",
- *   "address": "xxx",  // should split this up if time allows
- *   "phoneNumber": "xxx",
- *   "time": "yyyy-MM-dd hh:mm:ss"
- * }
- */
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class DeliveryDto {
+public class RestaurantDto {
+    private Integer id;
     private String name;
     private String address;
     private String phoneNumber;
-    private String time;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -44,18 +43,13 @@ public class DeliveryDto {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
-    public DeliveryDto(String name, String address, String phoneNumber, String time) {
+    public RestaurantDto(Integer id, String name, String address, String phoneNumber) {
+        this.id = id;
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber;
-        this.time = time;
+    }
+
+    public RestaurantDto() {
     }
 }

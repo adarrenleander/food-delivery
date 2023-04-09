@@ -15,7 +15,7 @@ public class NotificationService {
     @Autowired private JmsTemplate jmsTemplate;
     @Value("${mq.topic.send-notification}") private String mqTopicSendNotification;
 
-    public void sendNotification(String notificationId, String userId) {
+    public void sendNotification(Integer notificationId, Integer userId) {
         NotifyDto pubReq = new NotifyDto();
         pubReq.setUserId(userId);
         pubReq.setNotificationId(notificationId);

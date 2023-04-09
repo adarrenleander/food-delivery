@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+
 @RestController
 public class OrderController {
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(OrderController.class);
@@ -27,21 +29,21 @@ public class OrderController {
     }
 
     @GetMapping("/orders/{userId}")
-    public ResponseEntity<OrderDto[]> getOrdersHistory(@PathVariable(name = "userId") String userId) {
+    public ResponseEntity<ArrayList<OrderDto>> getOrdersHistory(@PathVariable(name = "userId") Integer userId) {
         log.debug("GET /orders/{userId} getOrdersHistory");
-        OrderDto[] response = orderService.getOrdersHistory(userId);
+        ArrayList<OrderDto> response = orderService.getOrdersHistory(userId);
         return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/order/{orderId}")
-    public ResponseEntity<OrderDto> getOrder(@PathVariable(name = "orderId") String orderId) {
+    public ResponseEntity<OrderDto> getOrder(@PathVariable(name = "orderId") Integer orderId) {
         log.debug("GET /order/{orderId} getOrder");
         OrderDto response = orderService.getOrder(orderId);
         return ResponseEntity.ok().body(response);
     }
 
     @DeleteMapping("/order/{orderId}")
-    public ResponseEntity<OrderDto> cancelOrder(@PathVariable(name = "orderId") String orderId) {
+    public ResponseEntity<OrderDto> cancelOrder(@PathVariable(name = "orderId") Integer orderId) {
         log.debug("DELETE /order/{orderId} cancelOrder");
         OrderDto response = orderService.cancelOrder(orderId);
         return ResponseEntity.ok().body(response);

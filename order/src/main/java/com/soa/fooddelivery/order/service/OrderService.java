@@ -1,10 +1,18 @@
 package com.soa.fooddelivery.order.service;
 
 import com.soa.fooddelivery.order.dto.*;
+import com.soa.fooddelivery.order.entity.Delivery;
+import com.soa.fooddelivery.order.entity.Order;
+import com.soa.fooddelivery.order.entity.OrderItem;
+import com.soa.fooddelivery.order.repository.DeliveryRepository;
+import com.soa.fooddelivery.order.repository.OrderItemRepository;
+import com.soa.fooddelivery.order.repository.OrderRepository;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
 
 @Service
 public class OrderService {
@@ -13,6 +21,9 @@ public class OrderService {
     @Autowired private PaymentService paymentService;
     @Autowired private DispatchService dispatchService;
     @Autowired private NotificationService notificationService;
+    @Autowired private OrderRepository orderRepository;
+    @Autowired private DeliveryRepository deliveryRepository;
+    @Autowired private OrderItemRepository orderItemRepository;
 
     public OrderDto createOrder(OrderDto request) {
         OrderDto response = new OrderDto();
@@ -22,108 +33,111 @@ public class OrderService {
             request.setTotalAmount(resPromoEligible.getFinalAmount());
         }
 
-        // TODO: save order to DB with status created
-        response.setOrderId("xxx");
+        Order order = saveOrderToDB(request);
+        response.setOrderId(order.getId());
 
         TransactionStatusDto resPay = paymentService.chargePayment(request);
         if (resPay.getStatus().equals("failed")) {
+            updateOrderStatus(new OrderDto(order.getId(), "failed"));
             response.setStatus("failed");
-            // TODO: update order to failed in DB
             return response;
         }
 
         // should failed apply promo lead to failed order?
         PromotionUserDto resPromoApply = promotionService.applyPromotion(request);
         if (!resPromoApply.getUsageStatus().equals("success")) {
-            TransactionStatusDto resRefund = paymentService.refundPayment(resPay.getTransactionId(), request.getUserId(), request.getTotalAmount());
-
-            // TODO: update order to failed in DB
-
+            paymentService.refundPayment(resPay.getTransactionId(), request.getUserId(), request.getTotalAmount());
+            updateOrderStatus(new OrderDto(order.getId(), "failed"));
             response.setStatus("failed");
             return response;
         }
 
         DispatchDto resDispatch = dispatchService.dispatchOrder(request);
         if (!resDispatch.getStatus().equals("created")) {
-            TransactionStatusDto resRefund = paymentService.refundPayment(resPay.getTransactionId(), request.getUserId(), request.getTotalAmount());
-
-            // TODO: update order to failed in DB
-
+            paymentService.refundPayment(resPay.getTransactionId(), request.getUserId(), request.getTotalAmount());
+            updateOrderStatus(new OrderDto(order.getId(), "failed"));
             response.setStatus("failed");
             return response;
         }
 
-        // TODO: update order status to placed
-
-        notificationService.sendNotification("xxx", request.getUserId());
-
+        updateOrderStatus(new OrderDto(order.getId(), "placed"));
         response.setStatus("placed");
+
+        notificationService.sendNotification(1, request.getUserId());
+
         return response;
     }
 
-    public OrderDto updateOrderStatus(OrderDto request) {
-        // TODO: update the order status in DB according to status and orderId in request
+    @Transactional(rollbackFor={Exception.class})
+    public Order saveOrderToDB(OrderDto request) {
+        Delivery delivery = new Delivery();
+        delivery.setName(request.getDelivery().getName());
+        delivery.setAddress(request.getDelivery().getAddress());
+        delivery.setPhoneNumber(request.getDelivery().getPhoneNumber());
+        delivery.setTime(request.getDelivery().getTime());
+        deliveryRepository.save(delivery);
 
-        OrderDto response = new OrderDto();
-        response.setOrderId(request.getOrderId());
-        response.setStatus("completed");
-        return response;
-    }
-
-    public OrderDto[] getOrdersHistory(String userId) {
-        // TODO: query all orders from DB descending by date
-
-        OrderDto order = getDummyFullOrder();
-        order.setUserId(userId);
-        return new OrderDto[]{order, order, order};
-    }
-
-    public OrderDto getOrder(String orderId) {
-        // TODO: query order by orderId to DB
-
-        OrderDto response = getDummyFullOrder();
-        response.setOrderId(orderId);
-        return response;
-    }
-
-    public OrderDto cancelOrder(String orderId) {
-        // TODO: set order status to canceled in DB
-
-        OrderDto response = new OrderDto();
-        response.setOrderId(orderId);
-        response.setStatus("canceled");
-        return response;
-    }
-
-    public OrderDto getDummyFullOrder() {
-        DeliveryDto delivery = new DeliveryDto();
-        delivery.setName("name");
-        delivery.setPhoneNumber("+31123456");
-        delivery.setTime("2023-03-22 15:30");
-        delivery.setAddress("Drienerlolaan 5, 7522 NB Enschede");
-
-        OrderItemDto order1 = new OrderItemDto();
-        order1.setMenuItemId("xxx");
-        order1.setPrice(5F);
-        order1.setQuantity(1);
-        order1.setNotes("");
-
-        OrderItemDto order2 = new OrderItemDto();
-        order2.setMenuItemId("xxx");
-        order2.setPrice(10F);
-        order2.setQuantity(1);
-        order2.setNotes("");
-
-        OrderItemDto[] orders = {order1, order2};
-
-        OrderDto order = new OrderDto();
-        order.setOrderId("xxx");
-        order.setUserId("xxx");
-        order.setRestaurantId("xxx");
-        order.setStatus("completed");
-        order.setTotalAmount(15F);
-        order.setOrders(orders);
+        Order order = new Order();
+        order.setUserId(request.getUserId());
+        order.setRestaurantId(request.getRestaurantId());
+        order.setPromotionCode(request.getPromotionCode());
+        order.setTotalAmount(request.getTotalAmount());
         order.setDelivery(delivery);
+        order.setStatus("created");
+        order = orderRepository.save(order);
+
+        for (OrderItemDto oi : request.getOrders()) {
+            OrderItem orderItem = new OrderItem();
+            orderItem.setOrder(order);
+            orderItem.setMenuItemId(oi.getMenuItemId());
+            orderItem.setQuantity(oi.getQuantity());
+            orderItem.setNotes(oi.getNotes());
+            orderItem.setPrice(oi.getPrice());
+            orderItemRepository.save(orderItem);
+        }
+
         return order;
+    }
+
+    @Transactional(rollbackFor={Exception.class})
+    public OrderDto updateOrderStatus(OrderDto request) {
+        Order order = orderRepository.findAllById(request.getOrderId()).get(0);
+        order.setStatus(request.getStatus());
+        orderRepository.save(order);
+
+        OrderDto response = new OrderDto();
+        response.setOrderId(order.getId());
+        response.setStatus(order.getStatus());
+        return response;
+    }
+
+    public ArrayList<OrderDto> getOrdersHistory(Integer userId) {
+        ArrayList<OrderDto> list = new ArrayList<>();
+
+        for (Order order : orderRepository.findAllByUserId(userId)) {
+            OrderDto orderDto = order.convertToDto();
+            orderDto.setOrders(orderItemRepository.findAllByOrderId(order.getId()));
+            list.add(orderDto);
+        }
+        return list;
+    }
+
+    public OrderDto getOrder(Integer orderId) {
+        Order order = orderRepository.findAllById(orderId).get(0);
+        OrderDto response = order.convertToDto();
+        response.setOrders(orderItemRepository.findAllByOrderId(order.getId()));
+        return response;
+    }
+
+    @Transactional(rollbackFor={Exception.class})
+    public OrderDto cancelOrder(Integer orderId) {
+        Order order = orderRepository.findAllById(orderId).get(0);
+        order.setStatus("canceled");
+        orderRepository.save(order);
+
+        OrderDto response = new OrderDto();
+        response.setOrderId(order.getId());
+        response.setStatus(order.getStatus());
+        return response;
     }
 }

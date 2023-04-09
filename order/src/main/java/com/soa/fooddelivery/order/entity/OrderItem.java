@@ -1,24 +1,39 @@
-package com.soa.fooddelivery.order.dto;
+package com.soa.fooddelivery.order.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import javax.persistence.*;
 
-/**
- * {
- *   "menuItemId": "xxx",
- *   "quantity": 1,
- *   "notes": "xxx",
- *   "price": 2
- * }
- */
+@Entity
+@Table
+public class OrderItem {
+    @Id
+    @Column(unique = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class OrderItemDto {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
+    private Order order;
+
     private Integer menuItemId;
     private Integer quantity;
     private String notes;
     private Float price;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
 
     public Integer getMenuItemId() {
         return menuItemId;
@@ -49,13 +64,6 @@ public class OrderItemDto {
     }
 
     public void setPrice(Float price) {
-        this.price = price;
-    }
-
-    public OrderItemDto(Integer menuItemId, Integer quantity, String notes, Float price) {
-        this.menuItemId = menuItemId;
-        this.quantity = quantity;
-        this.notes = notes;
         this.price = price;
     }
 }

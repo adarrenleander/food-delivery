@@ -34,7 +34,7 @@ public class PaymentService {
         return res;
     }
 
-    public TransactionStatusDto refundPayment(String transactionId, String userId, Float refundAmount) {
+    public TransactionStatusDto refundPayment(Integer transactionId, Integer userId, Float refundAmount) {
         RestTemplate restTemplate = restTemplateBuilder.build();
         String url = paymentConfiguration.getHost() + paymentConfiguration.getRefundPath();
 

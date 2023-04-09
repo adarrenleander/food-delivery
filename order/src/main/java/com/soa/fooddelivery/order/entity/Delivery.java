@@ -1,24 +1,33 @@
-package com.soa.fooddelivery.order.dto;
+package com.soa.fooddelivery.order.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.soa.fooddelivery.order.dto.DeliveryDto;
 
-/**
- * {
- *   "name": "xxx",
- *   "address": "xxx",  // should split this up if time allows
- *   "phoneNumber": "xxx",
- *   "time": "yyyy-MM-dd hh:mm:ss"
- * }
- */
+import javax.persistence.*;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class DeliveryDto {
+@Entity
+@Table
+public class Delivery {
+    @Id
+    @Column(unique = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     private String name;
     private String address;
     private String phoneNumber;
     private String time;
+
+    public DeliveryDto convertToDto() {
+        return new DeliveryDto(name, address, phoneNumber, time);
+    }
+
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -49,13 +58,6 @@ public class DeliveryDto {
     }
 
     public void setTime(String time) {
-        this.time = time;
-    }
-
-    public DeliveryDto(String name, String address, String phoneNumber, String time) {
-        this.name = name;
-        this.address = address;
-        this.phoneNumber = phoneNumber;
         this.time = time;
     }
 }

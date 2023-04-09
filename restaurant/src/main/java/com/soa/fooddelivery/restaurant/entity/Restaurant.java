@@ -16,8 +16,9 @@ public class Restaurant {
     private Integer id;
     private String name;
     private String address;
+    private String phoneNumber;
 
     public RestaurantDto convertToDto(){
-        return new RestaurantDto(id, name, address);
+        return new RestaurantDto(id, name, address, phoneNumber);
     }
 }
