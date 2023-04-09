@@ -27,10 +27,13 @@ public class OrderService {
 
     public OrderDto createOrder(OrderDto request) {
         OrderDto response = new OrderDto();
+        PromotionEligibilityDto resPromoEligible = null;
 
-        PromotionEligibilityDto resPromoEligible = promotionService.checkPromotionEligiblity(request);
-        if (resPromoEligible.getEligibility()) {
-            request.setTotalAmount(resPromoEligible.getFinalAmount());
+        if (!request.getPromotionCode().isEmpty()) {
+            resPromoEligible = promotionService.checkPromotionEligiblity(request);
+            if (resPromoEligible.getEligibility()) {
+                request.setTotalAmount(resPromoEligible.getFinalAmount());
+            }
         }
 
         Order order = saveOrderToDB(request);
@@ -43,13 +46,14 @@ public class OrderService {
             return response;
         }
 
-        // should failed apply promo lead to failed order?
-        PromotionUserDto resPromoApply = promotionService.applyPromotion(request);
-        if (!resPromoApply.getUsageStatus().equals("success")) {
-            paymentService.refundPayment(resPay.getTransactionId(), request.getUserId(), request.getTotalAmount());
-            updateOrderStatus(new OrderDto(order.getId(), "failed"));
-            response.setStatus("failed");
-            return response;
+        if (resPromoEligible != null && resPromoEligible.getEligibility()) {
+            PromotionUserDto resPromoApply = promotionService.applyPromotion(request);
+            if (!resPromoApply.getUsageStatus().equals("success")) {
+                paymentService.refundPayment(resPay.getTransactionId(), request.getUserId(), request.getTotalAmount());
+                updateOrderStatus(new OrderDto(order.getId(), "failed"));
+                response.setStatus("failed");
+                return response;
+            }
         }
 
         DispatchDto resDispatch = dispatchService.dispatchOrder(request);
@@ -131,13 +135,6 @@ public class OrderService {
 
     @Transactional(rollbackFor={Exception.class})
     public OrderDto cancelOrder(Integer orderId) {
-        Order order = orderRepository.findAllById(orderId).get(0);
-        order.setStatus("canceled");
-        orderRepository.save(order);
-
-        OrderDto response = new OrderDto();
-        response.setOrderId(order.getId());
-        response.setStatus(order.getStatus());
-        return response;
+        return updateOrderStatus(new OrderDto(orderId, "canceled"));
     }
 }

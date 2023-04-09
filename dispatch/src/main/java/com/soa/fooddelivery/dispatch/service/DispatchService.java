@@ -17,7 +17,7 @@ public class DispatchService {
 
     public DispatchDto dispatchOrder(DispatchDto dispatch) {
         // TODO: save dispatch to DB
-        String dispatchId = "xxx";
+        Integer dispatchId = 1;
         dispatch.setDispatchId(dispatchId);
 
         publishFindDriver(dispatch);
@@ -28,17 +28,17 @@ public class DispatchService {
         return res;
     }
 
-    public DispatchDto acceptDispatch(String dispatchId) {
+    public DispatchDto acceptDispatch(Integer dispatchId) {
         // TODO: update to DB as accepted
 
         DispatchDto res = new DispatchDto();
         res.setDispatchId(dispatchId);
         res.setStatus("accepted");
-        res.setDriverId("xxx");
+        res.setDriverId(1);
         return res;
     }
 
-    public DispatchDto rejectDispatch(String dispatchId) {
+    public DispatchDto rejectDispatch(Integer dispatchId) {
         // TODO: query DB for dispatch by dispatchId
         DispatchDto dispatch = new DispatchDto();
 
@@ -59,7 +59,7 @@ public class DispatchService {
         return res;
     }
 
-    public DispatchDto getDispatchStatus(String dispatchId) {
+    public DispatchDto getDispatchStatus(Integer dispatchId) {
         // TODO: query from DB based on dispatchId
 
         // TODO: hit tracking service to get tracking information

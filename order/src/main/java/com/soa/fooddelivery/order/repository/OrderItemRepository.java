@@ -11,6 +11,6 @@ import java.util.List;
 
 @Repository
 public interface OrderItemRepository extends CrudRepository<OrderItem, String> {
-    @Query("SELECT new com.soa.fooddelivery.order.dto.OrderItemDto(o.menuItemId, o.quantity, o.notes, o.price) FROM OrderItem o WHERE o.id=:orderId")
+    @Query("SELECT new com.soa.fooddelivery.order.dto.OrderItemDto(o.menuItemId, o.quantity, o.notes, o.price) FROM OrderItem o WHERE o.order.id=:orderId")
     List<OrderItemDto> findAllByOrderId(@Param("orderId") Integer orderId);
 }

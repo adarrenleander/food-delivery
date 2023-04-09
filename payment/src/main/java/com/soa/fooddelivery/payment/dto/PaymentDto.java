@@ -16,7 +16,7 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PaymentDto {
-    private String orderId;
-    private String userId;
+    private Integer orderId;
+    private Integer userId;
     private Float totalAmount;
 }

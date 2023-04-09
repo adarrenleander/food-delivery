@@ -16,7 +16,7 @@ public class RefundService {
 
         // the refund is mocked from third-party provider
         TransactionStatusDto res = new TransactionStatusDto();
-        res.setTransactionId("xxx");
+        res.setTransactionId(1);
         res.setStatus("success");
         return res;
     }

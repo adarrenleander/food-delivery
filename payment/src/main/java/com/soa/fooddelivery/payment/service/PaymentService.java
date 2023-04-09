@@ -16,7 +16,7 @@ public class PaymentService {
         // but we will not implement that in this scope,
         // so we will make a mock success payment
         TransactionStatusDto res = new TransactionStatusDto();
-        res.setTransactionId("xxx");
+        res.setTransactionId(1);
         res.setStatus("success");
         return res;
     }

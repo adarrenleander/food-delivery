@@ -20,9 +20,9 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TransactionStatusDto {
-    private String transactionId;
+    private Integer transactionId;
     private String transactionType; // payment / refund
-    private String userId;
-    private String orderId;
+    private Integer userId;
+    private Integer orderId;
     private String status; // only used in response -> success / in progress / failed
 }

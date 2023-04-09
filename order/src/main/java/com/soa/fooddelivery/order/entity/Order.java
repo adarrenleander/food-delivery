@@ -1,13 +1,11 @@
 package com.soa.fooddelivery.order.entity;
 
-import com.soa.fooddelivery.order.dto.DeliveryDto;
 import com.soa.fooddelivery.order.dto.OrderDto;
-import com.soa.fooddelivery.order.dto.OrderItemDto;
 
 import javax.persistence.*;
 
 @Entity
-@Table
+@Table(name = "order_trx")
 public class Order {
     @Id
     @Column(unique = true)
