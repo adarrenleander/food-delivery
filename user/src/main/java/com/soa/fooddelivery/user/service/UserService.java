@@ -1,5 +1,6 @@
 package com.soa.fooddelivery.user.service;
 
+import com.soa.fooddelivery.user.dto.LoyaltyDto;
 import com.soa.fooddelivery.user.dto.UserDto;
 import com.soa.fooddelivery.user.entity.User;
 import com.soa.fooddelivery.user.repository.UserRepository;
@@ -34,9 +35,10 @@ public class UserService {
         user.setLastName(userDto.getLastName());
         user.setActiveStatus(true);
         user.setCategory(userDto.getCategory());
-        userRepository.save(user);
-        UserDto result = user.convertToDto();
-        UserDto res = restTemplate.postForObject("http://localhost:8085/loyalty/",result, UserDto.class);
+        user = userRepository.save(user);
+        LoyaltyDto req = new LoyaltyDto();
+        req.setUser(user.convertToDto());
+//        LoyaltyDto res = restTemplate.postForObject("http://localhost:8081/loyalty", req, LoyaltyDto.class);
         return user.convertToDto();
     }
 

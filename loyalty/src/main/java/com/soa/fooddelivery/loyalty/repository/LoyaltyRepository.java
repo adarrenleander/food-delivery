@@ -9,6 +9,5 @@ import java.util.List;
 
 @Repository
 public interface LoyaltyRepository extends CrudRepository<Loyalty, String> {
-
     List<Loyalty> findAllByUserId(@Param("id") Integer id);
 }

@@ -13,12 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class LoyaltyService {
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(LoyaltyService.class);
-
-    LoyaltyRepository loyaltyRepository;
-
-    @Autowired
-    PromotionService promotionService;
-
+    @Autowired private LoyaltyRepository loyaltyRepository;
+    @Autowired private PromotionService promotionService;
 
     @Transactional(rollbackFor = {Exception.class})
     public LoyaltyDto createLoyalty(LoyaltyDto loyaltyDto){
@@ -65,17 +61,8 @@ public class LoyaltyService {
         return res;
     }
 
-  /*  public LoyaltyDto getLoyalty(Integer userId) {
-        // TODO: query from DB based on userId
-
-        LoyaltyDto res = new LoyaltyDto();
-        UserDto user = new UserDto();
-        user.setId(userId);
-        res.setUser(user);
-        res.setLoyaltyPoint(24);
-
-        return res;
+    public LoyaltyDto getLoyalty(Integer userId) {
+        Loyalty loyalty = loyaltyRepository.findAllByUserId(userId).get(0);
+        return loyalty.convertToDto();
     }
-
-   */
 }

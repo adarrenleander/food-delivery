@@ -12,11 +12,10 @@ import org.springframework.web.bind.annotation.*;
 public class LoyaltyController {
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(LoyaltyController.class);
     @Autowired private LoyaltyService loyaltyService;
-    LoyaltyRepository loyaltyRepository;
-
 
     @PostMapping("/loyalty")
-    public ResponseEntity<LoyaltyDto> createUser(@RequestBody LoyaltyDto request) {
+    public ResponseEntity<LoyaltyDto> createLoyaltyUser(@RequestBody LoyaltyDto request) {
+        log.debug("POST /loyalty createLoyaltyUser");
         LoyaltyDto response = loyaltyService.createLoyalty(request);
         return ResponseEntity.ok().body(response);
     }
@@ -38,8 +37,7 @@ public class LoyaltyController {
     @GetMapping("/loyalty/{userId}")
     public ResponseEntity<LoyaltyDto> getLoyalty(@PathVariable(name = "userId") Integer userId){
         log.debug("GET /loyalty/{userId} getLoyalty");
-        LoyaltyDto response = loyaltyRepository.findAllByUserId(userId).get(0).convertToDto();
+        LoyaltyDto response = loyaltyService.getLoyalty(userId);
         return ResponseEntity.ok().body(response);
     }
-
 }
