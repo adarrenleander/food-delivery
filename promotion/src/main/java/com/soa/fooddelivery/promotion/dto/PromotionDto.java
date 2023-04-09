@@ -8,13 +8,13 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PromotionDto {
-    private String id;
+    private Integer id;
     private String code;
     private Float discount;
     private Integer loyaltyPoint;
     private Boolean activeStatus;
 
-    public PromotionDto(String id, String code, Float discount, Boolean activeStatus, Integer loyaltyPoint) {
+    public PromotionDto(Integer id, String code, Float discount, Boolean activeStatus, Integer loyaltyPoint) {
         this.id = id;
         this.code = code;
         this.discount = discount;

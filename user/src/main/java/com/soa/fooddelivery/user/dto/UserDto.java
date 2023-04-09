@@ -8,15 +8,15 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDto {
-    private String id;
-    private String frontName;
+    private Integer id;
+    private String firstName;
     private String lastName;
     private String category; //customer,driver
     private Boolean activeStatus;
 
-    public UserDto(String id, String frontName, String lastName, String category, Boolean activeStatus) {
+    public UserDto(Integer id, String firstName, String lastName, String category, Boolean activeStatus) {
         this.id = id;
-        this.frontName = frontName;
+        this.firstName = firstName;
         this.lastName = lastName;
         this.category = category;
         this.activeStatus = activeStatus;

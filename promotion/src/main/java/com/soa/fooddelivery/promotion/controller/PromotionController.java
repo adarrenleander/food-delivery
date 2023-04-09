@@ -96,7 +96,7 @@ public class PromotionController {
     @PostMapping("/promotion/grant")
     public ResponseEntity<PromotionUserDto> grantPromotion(@RequestBody PromotionUserDto request){
         PromotionUserDto promotionUser = new PromotionUserDto();
-        promotionUser.setPromotion(new PromotionDto("123","ABC123",(float)30, true,14));
+        promotionUser.setPromotion(new PromotionDto(123,"ABC123",(float)30, true,14));
         promotionUser.setUser(new UserDto("1234", "Juwita", "Pasaribu", "customer", true));
         promotionUser.setActiveStatus(true);
         return ResponseEntity.ok().body(promotionUser);
@@ -105,7 +105,7 @@ public class PromotionController {
     @PostMapping("/promotion/apply")
     public ResponseEntity<PromotionUserDto> applyPromotion(@RequestBody PromotionUserDto request){
         PromotionUserDto promotionUser = new PromotionUserDto();
-        promotionUser.setPromotion(new PromotionDto("123","ABC123",(float)30, true,14));
+        promotionUser.setPromotion(new PromotionDto(123,"ABC123",(float)30, true,14));
         promotionUser.setUser(new UserDto("1234", "Juwita", "Pasaribu", "customer", true));
         promotionUser.setUsageStatus("success");
         return ResponseEntity.ok().body(promotionUser);
@@ -113,9 +113,9 @@ public class PromotionController {
 
     public List<PromotionDto> getSampleFullPromotion() {
         List<PromotionDto> response = new ArrayList<>();
-        PromotionDto promotion1 = new PromotionDto("123","ABC123",(float)30, true,12);
-        PromotionDto promotion2 = new PromotionDto("124","ABC1234",(float)40, true,13);
-        PromotionDto promotion3 = new PromotionDto("125","ABC12345",(float)60, true,20);
+        PromotionDto promotion1 = new PromotionDto(123,"ABC123",(float)30, true,12);
+        PromotionDto promotion2 = new PromotionDto(124,"ABC1234",(float)40, true,13);
+        PromotionDto promotion3 = new PromotionDto(125,"ABC12345",(float)60, true,20);
         response.add(promotion1);
         response.add(promotion2);
         response.add(promotion3);
