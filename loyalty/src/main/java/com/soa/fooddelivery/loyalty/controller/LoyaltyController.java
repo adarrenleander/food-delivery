@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 public class LoyaltyController {
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(LoyaltyController.class);
     @Autowired private LoyaltyService loyaltyService;
-    @Autowired
     LoyaltyRepository loyaltyRepository;
 
 
