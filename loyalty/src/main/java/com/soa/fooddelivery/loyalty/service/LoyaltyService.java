@@ -3,7 +3,6 @@ package com.soa.fooddelivery.loyalty.service;
 import com.soa.fooddelivery.loyalty.dto.LoyaltyDto;
 import com.soa.fooddelivery.loyalty.dto.PromotionDto;
 import com.soa.fooddelivery.loyalty.dto.PromotionUserDto;
-import com.soa.fooddelivery.loyalty.dto.UserDto;
 import com.soa.fooddelivery.loyalty.entity.Loyalty;
 import com.soa.fooddelivery.loyalty.repository.LoyaltyRepository;
 import org.slf4j.Logger;
@@ -15,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class LoyaltyService {
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(LoyaltyService.class);
 
-    @Autowired
     LoyaltyRepository loyaltyRepository;
 
     @Autowired
