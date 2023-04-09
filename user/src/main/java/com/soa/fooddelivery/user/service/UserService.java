@@ -4,14 +4,19 @@ import com.soa.fooddelivery.user.dto.UserDto;
 import com.soa.fooddelivery.user.entity.User;
 import com.soa.fooddelivery.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 public class UserService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    private RestTemplateBuilder restTemplateBuilder;
 
     @Transactional(rollbackFor={Exception.class})
     public UserDto deleteUser (Integer id){
@@ -23,12 +28,15 @@ public class UserService {
 
     @Transactional(rollbackFor = {Exception.class})
     public UserDto createUser(UserDto userDto){
+        RestTemplate restTemplate = restTemplateBuilder.build();
         User user = new User();
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user.setActiveStatus(true);
         user.setCategory(userDto.getCategory());
         userRepository.save(user);
+        UserDto result = user.convertToDto();
+        UserDto res = restTemplate.postForObject("http://localhost:8085/loyalty/",result, UserDto.class);
         return user.convertToDto();
     }
 

@@ -4,31 +4,44 @@ import com.soa.fooddelivery.loyalty.dto.LoyaltyDto;
 import com.soa.fooddelivery.loyalty.dto.PromotionDto;
 import com.soa.fooddelivery.loyalty.dto.PromotionUserDto;
 import com.soa.fooddelivery.loyalty.dto.UserDto;
+import com.soa.fooddelivery.loyalty.entity.Loyalty;
+import com.soa.fooddelivery.loyalty.repository.LoyaltyRepository;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class LoyaltyService {
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(LoyaltyService.class);
-    @Autowired private PromotionService promotionService;
+
+    @Autowired
+    LoyaltyRepository loyaltyRepository;
+
+    @Autowired
+    PromotionService promotionService;
+
+
+    @Transactional(rollbackFor = {Exception.class})
+    public LoyaltyDto createLoyalty(LoyaltyDto loyaltyDto){
+        Loyalty loyalty = new Loyalty();
+        loyalty.setUserId(loyaltyDto.getUser().getId());
+        loyalty.setLoyaltyPoint(0);
+        loyaltyRepository.save(loyalty);
+        return loyalty.convertToDto();
+    }
 
     public LoyaltyDto grantLoyalty(LoyaltyDto request) {
-        // TODO: add granted loyalty points from request to DB based on userId
-        Integer currLoyaltyPoints = 5;
-
-        LoyaltyDto res = new LoyaltyDto();
-        UserDto user = new UserDto();
-        user.setId(request.getUser().getId());
-        res.setUser(user);
-        res.setLoyaltyPoint(request.getLoyaltyPoint() + currLoyaltyPoints);
-
-        return res;
+        Loyalty loyalty = loyaltyRepository.findAllByUserId(request.getUser().getId()).get(0);
+        Integer currLoyaltyPoints = loyalty.getLoyaltyPoint();
+        loyalty.setLoyaltyPoint(request.getLoyaltyPoint() + currLoyaltyPoints);
+        loyalty = loyaltyRepository.save(loyalty);
+        return loyalty.convertToDto();
     }
 
     public LoyaltyDto redeemLoyalty(LoyaltyDto request) {
-        // TODO: get loyalty by userId
-        Integer currLoyaltyPoints = 20;
+        Loyalty loyalty = loyaltyRepository.findAllByUserId(request.getUser().getId()).get(0);
+        Integer currLoyaltyPoints = loyalty.getLoyaltyPoint();
 
         LoyaltyDto res = new LoyaltyDto();
         res.setUser(request.getUser());
@@ -47,14 +60,14 @@ public class LoyaltyService {
             return res;
         }
 
-        //res.setLoyaltyPoint(res.getLoyaltyPoint() - resPromo.getPromotion().getLoyaltyPoint());\
-        // TODO: subtract loyalty points in DB
         res.setRedeemStatus("success");
-
+        loyalty.setLoyaltyPoint(currLoyaltyPoints-request.getPromotion().getLoyaltyPoint());
+        loyalty = loyaltyRepository.save(loyalty);
+        res.setLoyaltyPoint(loyalty.getLoyaltyPoint());
         return res;
     }
 
-    public LoyaltyDto getLoyalty(String userId) {
+  /*  public LoyaltyDto getLoyalty(Integer userId) {
         // TODO: query from DB based on userId
 
         LoyaltyDto res = new LoyaltyDto();
@@ -65,4 +78,6 @@ public class LoyaltyService {
 
         return res;
     }
+    
+   */
 }

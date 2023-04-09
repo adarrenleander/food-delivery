@@ -1,6 +1,7 @@
 package com.soa.fooddelivery.loyalty.controller;
 
 import com.soa.fooddelivery.loyalty.dto.LoyaltyDto;
+import com.soa.fooddelivery.loyalty.repository.LoyaltyRepository;
 import com.soa.fooddelivery.loyalty.service.LoyaltyService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,15 @@ import org.springframework.web.bind.annotation.*;
 public class LoyaltyController {
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(LoyaltyController.class);
     @Autowired private LoyaltyService loyaltyService;
+    @Autowired
+    LoyaltyRepository loyaltyRepository;
+
+
+    @PostMapping("/loyalty")
+    public ResponseEntity<LoyaltyDto> createUser(@RequestBody LoyaltyDto request) {
+        LoyaltyDto response = loyaltyService.createLoyalty(request);
+        return ResponseEntity.ok().body(response);
+    }
 
     @PostMapping("/loyalty/grant")
     public ResponseEntity<LoyaltyDto> grantLoyalty(@RequestBody LoyaltyDto request){
@@ -27,9 +37,9 @@ public class LoyaltyController {
     }
 
     @GetMapping("/loyalty/{userId}")
-    public ResponseEntity<LoyaltyDto> getLoyalty(@PathVariable(name = "userId") String userId){
+    public ResponseEntity<LoyaltyDto> getLoyalty(@PathVariable(name = "userId") Integer userId){
         log.debug("GET /loyalty/{userId} getLoyalty");
-        LoyaltyDto response = loyaltyService.getLoyalty(userId);
+        LoyaltyDto response = loyaltyRepository.findAllByUserId(userId).get(0).convertToDto();
         return ResponseEntity.ok().body(response);
     }
 

@@ -12,4 +12,19 @@ public class LoyaltyDto {
     private UserDto user;
     private Integer loyaltyPoint;
     private String redeemStatus;
+
+    public LoyaltyDto(UserDto user, Integer loyaltyPoint) {
+        this.user = user;
+        this.loyaltyPoint = loyaltyPoint;
+    }
+
+    public LoyaltyDto(PromotionDto promotion, UserDto user, Integer loyaltyPoint, String redeemStatus) {
+        this.promotion = promotion;
+        this.user = user;
+        this.loyaltyPoint = loyaltyPoint;
+        this.redeemStatus = redeemStatus;
+    }
+
+    public LoyaltyDto() {
+    }
 }

@@ -4,6 +4,7 @@ import com.soa.fooddelivery.user.dto.UserDto;
 import com.soa.fooddelivery.user.repository.UserRepository;
 import com.soa.fooddelivery.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +18,7 @@ public class UserController {
 
     @Autowired
     UserRepository userRepository;
+
 
     @PostMapping("/user")
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto request) {

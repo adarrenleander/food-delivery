@@ -9,13 +9,13 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDto {
-    private String id;
+    private Integer id;
     private String frontName;
     private String lastName;
     private String category; //customer,driver
     private Boolean activeStatus;
 
-    public UserDto(String id, String frontName, String lastName, String category, Boolean activeStatus) {
+    public UserDto(Integer id, String frontName, String lastName, String category, Boolean activeStatus) {
         this.id = id;
         this.frontName = frontName;
         this.lastName = lastName;
@@ -24,5 +24,9 @@ public class UserDto {
     }
 
     public UserDto() {
+    }
+
+    public UserDto(Integer id) {
+        this.id = id;
     }
 }
