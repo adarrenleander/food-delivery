@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+
 @RestController
 public class NotificationController {
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(NotificationController.class);
@@ -29,24 +31,24 @@ public class NotificationController {
         return ResponseEntity.ok().body(response);
     }
 
-    @DeleteMapping("/notification/template/{notificationId}")
-    public ResponseEntity<NotificationTemplateDto> deleteNotificationTemplate(@PathVariable(name = "notificationId") String notificationId) {
-        log.debug("DELETE /notification/template/{notificationId} deleteNotificationTemplate");
-        NotificationTemplateDto response = notificationTemplateService.deleteNotificationTemplate(notificationId);
+    @DeleteMapping("/notification/template/{notificationTemplateId}")
+    public ResponseEntity<NotificationTemplateDto> deleteNotificationTemplate(@PathVariable(name = "notificationTemplateId") Integer notificationTemplateId) {
+        log.debug("DELETE /notification/template/{notificationTemplateId} deleteNotificationTemplate");
+        NotificationTemplateDto response = notificationTemplateService.deleteNotificationTemplate(notificationTemplateId);
         return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/notification/templates")
-    public ResponseEntity<NotificationTemplateDto[]> getNotificationTemplatesList() {
+    public ResponseEntity<ArrayList<NotificationTemplateDto>> getNotificationTemplatesList() {
         log.debug("GET /notification/templates getNotificationTemplatesList");
-        NotificationTemplateDto[] response = notificationTemplateService.getNotificationTemplatesList();
+        ArrayList<NotificationTemplateDto> response = notificationTemplateService.getNotificationTemplatesList();
         return ResponseEntity.ok().body(response);
     }
 
-    @GetMapping("/notification/template/{notificationId}")
-    public ResponseEntity<NotificationTemplateDto> getNotificationTemplate(@PathVariable(name = "notificationId") String notificationId) {
-        log.debug("GET /notification/template/{notificationId}");
-        NotificationTemplateDto response = notificationTemplateService.getNotificationTemplate(notificationId);
+    @GetMapping("/notification/template/{notificationTemplateId}")
+    public ResponseEntity<NotificationTemplateDto> getNotificationTemplate(@PathVariable(name = "notificationTemplateId") Integer notificationTemplateId) {
+        log.debug("GET /notification/template/{notificationTemplateId}");
+        NotificationTemplateDto response = notificationTemplateService.getNotificationTemplate(notificationTemplateId);
         return ResponseEntity.ok().body(response);
     }
 
@@ -56,6 +58,4 @@ public class NotificationController {
         NotificationDto response = notificationService.sendNotification(request);
         return ResponseEntity.ok().body(response);
     }
-
-
 }

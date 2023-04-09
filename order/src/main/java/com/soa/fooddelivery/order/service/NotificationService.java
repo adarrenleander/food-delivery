@@ -15,10 +15,10 @@ public class NotificationService {
     @Autowired private JmsTemplate jmsTemplate;
     @Value("${mq.topic.send-notification}") private String mqTopicSendNotification;
 
-    public void sendNotification(Integer notificationId, Integer userId) {
+    public void sendNotification(Integer notificationTemplateId, Integer userId) {
         NotifyDto pubReq = new NotifyDto();
         pubReq.setUserId(userId);
-        pubReq.setNotificationId(notificationId);
+        pubReq.setNotificationTemplateId(notificationTemplateId);
 
         ObjectMapper mapper = new ObjectMapper();
         try {

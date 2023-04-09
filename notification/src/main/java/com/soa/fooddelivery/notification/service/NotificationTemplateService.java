@@ -1,68 +1,56 @@
 package com.soa.fooddelivery.notification.service;
 
 import com.soa.fooddelivery.notification.dto.NotificationTemplateDto;
+import com.soa.fooddelivery.notification.entity.NotificationTemplate;
+import com.soa.fooddelivery.notification.repository.NotificationTemplateRepository;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 
 @Service
 public class NotificationTemplateService {
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(NotificationTemplateService.class);
+    @Autowired private NotificationTemplateRepository notificationTemplateRepository;
 
-    public NotificationTemplateDto createNotificationTemplate(NotificationTemplateDto notifTemplate) {
-        // TODO: save notification template to DB
-
-        NotificationTemplateDto res = new NotificationTemplateDto();
-        res.setNotificationId("xxx");
-        res.setTitle(notifTemplate.getTitle());
-        res.setMessage(notifTemplate.getMessage());
-        res.setCategory(notifTemplate.getCategory());
-        res.setActive(true);
-        return res;
-    }
-
-    public NotificationTemplateDto updateNotificationTemplate(NotificationTemplateDto notifTemplate) {
-        // TODO: update notification template to DB
-
-        NotificationTemplateDto res = new NotificationTemplateDto();
-        res.setNotificationId(notifTemplate.getNotificationId());
-        res.setTitle(notifTemplate.getTitle());
-        res.setMessage(notifTemplate.getMessage());
-        res.setCategory(notifTemplate.getCategory());
-        res.setActive(notifTemplate.getActive());
-        return res;
-    }
-
-    public NotificationTemplateDto deleteNotificationTemplate(String notificationId) {
-        // TODO: set active false in DB
-
-        NotificationTemplateDto res = new NotificationTemplateDto();
-        res.setNotificationId(notificationId);
-        res.setActive(false);
-        return res;
-    }
-
-    public NotificationTemplateDto[] getNotificationTemplatesList() {
-        // TODO: query all notification templates from DB
-
-        NotificationTemplateDto notificationTemplate = getDummyNotificationTemplate();
-        return new NotificationTemplateDto[]{notificationTemplate, notificationTemplate, notificationTemplate};
-    }
-
-    public NotificationTemplateDto getNotificationTemplate(String notificationId) {
-        // TODO: query single notification template
-
-        NotificationTemplateDto res = getDummyNotificationTemplate();
-        res.setNotificationId(notificationId);
-        return res;
-    }
-
-    public NotificationTemplateDto getDummyNotificationTemplate() {
-        NotificationTemplateDto notificationTemplate = new NotificationTemplateDto();
-        notificationTemplate.setNotificationId("xxx");
-        notificationTemplate.setTitle("title");
-        notificationTemplate.setMessage("message");
-        notificationTemplate.setCategory("category");
+    public NotificationTemplateDto createNotificationTemplate(NotificationTemplateDto notificationTemplateDto) {
+        NotificationTemplate notificationTemplate = new NotificationTemplate();
+        notificationTemplate.setTitle(notificationTemplateDto.getTitle());
+        notificationTemplate.setMessage(notificationTemplateDto.getMessage());
+        notificationTemplate.setCategory(notificationTemplateDto.getCategory());
         notificationTemplate.setActive(true);
-        return notificationTemplate;
+        notificationTemplate = notificationTemplateRepository.save(notificationTemplate);
+        return notificationTemplate.convertToDto();
+    }
+
+    public NotificationTemplateDto updateNotificationTemplate(NotificationTemplateDto notificationTemplateDto) {
+        NotificationTemplate notificationTemplate = notificationTemplateRepository.findAllById(notificationTemplateDto.getNotificationTemplateId()).get(0);
+        notificationTemplate.setTitle(notificationTemplateDto.getTitle());
+        notificationTemplate.setMessage(notificationTemplateDto.getMessage());
+        notificationTemplate.setCategory(notificationTemplateDto.getCategory());
+        notificationTemplate.setActive(notificationTemplateDto.getActive());
+        notificationTemplate = notificationTemplateRepository.save(notificationTemplate);
+        return notificationTemplate.convertToDto();
+    }
+
+    public NotificationTemplateDto deleteNotificationTemplate(Integer notificationTemplateId) {
+        NotificationTemplate notificationTemplate = notificationTemplateRepository.findAllById(notificationTemplateId).get(0);
+        notificationTemplate.setActive(false);
+        notificationTemplate = notificationTemplateRepository.save(notificationTemplate);
+        return notificationTemplate.convertToDto();
+    }
+
+    public ArrayList<NotificationTemplateDto> getNotificationTemplatesList() {
+        ArrayList<NotificationTemplateDto> list = new ArrayList<>();
+        for (NotificationTemplate notificationTemplate : notificationTemplateRepository.findAll()) {
+            list.add(notificationTemplate.convertToDto());
+        }
+        return list;
+    }
+
+    public NotificationTemplateDto getNotificationTemplate(Integer notificationTemplateId) {
+        NotificationTemplate notificationTemplate = notificationTemplateRepository.findAllById(notificationTemplateId).get(0);
+        return notificationTemplate.convertToDto();
     }
 }
