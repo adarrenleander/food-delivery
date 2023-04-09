@@ -7,7 +7,7 @@ import lombok.Data;
 /**
  * {
  *   "dispatchId": "xxx",
- *   "driverId": "xxx"
+ *   "trackingURL": "xxx"
  * }
  */
 
@@ -16,5 +16,5 @@ import lombok.Data;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class OrderTrackingDto {
     private String dispatchId;
-    private String driverId;
+    private String trackingURL;
 }
