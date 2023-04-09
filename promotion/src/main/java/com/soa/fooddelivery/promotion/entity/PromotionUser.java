@@ -1,5 +1,7 @@
 package com.soa.fooddelivery.promotion.entity;
 
+import com.soa.fooddelivery.promotion.dto.PromotionUserDto;
+import com.soa.fooddelivery.promotion.repository.PromotionRepository;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,8 +18,14 @@ public class PromotionUser {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     private Promotion promotion;
-    private String code;
-    private Float discount;
-    private Integer loyaltyPoint;
-    private Boolean activeStatus;
+    private Integer userId;
+    private String usageStatus;
+
+
+    public PromotionUserDto convertToDto(PromotionRepository promotionRepository){
+        PromotionUserDto result = new PromotionUserDto();
+        result.setUsageStatus(usageStatus);
+        result.setPromotion(promotionRepository.findAllById(promotion.getId()).get(0).convertToDto());
+        return result;
+    }
 }

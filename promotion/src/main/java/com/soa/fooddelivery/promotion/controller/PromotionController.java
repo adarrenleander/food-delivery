@@ -3,6 +3,10 @@ package com.soa.fooddelivery.promotion.controller;
 import com.soa.fooddelivery.promotion.dto.PromotionDto;
 import com.soa.fooddelivery.promotion.dto.PromotionUserDto;
 import com.soa.fooddelivery.promotion.dto.UserDto;
+import com.soa.fooddelivery.promotion.entity.PromotionUser;
+import com.soa.fooddelivery.promotion.repository.PromotionRepository;
+import com.soa.fooddelivery.promotion.repository.PromotionUserRepository;
+import com.soa.fooddelivery.promotion.service.PromotionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
@@ -18,100 +22,89 @@ import java.util.Map;
 @RestController
 public class PromotionController {
 
+    @Autowired
+    PromotionUserRepository promotionUserRepository;
+
+    @Autowired
+    PromotionService promotionService;
+
+    @Autowired
+    PromotionRepository promotionRepository;
 
     @Autowired
     private RestTemplateBuilder restTemplateBuilder;
+
+
     @PostMapping("/promotion/eligibility")
     public ResponseEntity<Object> checkPromotionEligibility(@RequestBody PromotionUserDto request) {
         Map<String, Object> result = new HashMap<String, Object>();
         RestTemplate restTemplate = restTemplateBuilder.build();
-        //TODO : check if the promotionUser exist in db,
-        //
-        // TODO: check if the user active
-        UserDto res = restTemplate.getForObject("http://localhost:8088/user/"+request.getUser().getId(), UserDto.class);
-        if (res == null){
+        List<PromotionUser> promotionUser = promotionUserRepository.getPromotionUserByPromotionIdAndUserId(request.getPromotion().getId(),request.getUser().getId());
+        if (promotionUser.size()>0){
+            if (promotionUser.get(0).getUsageStatus()!=null && promotionUser.get(0).getPromotion().getActiveStatus()) {
+                if (!promotionUser.get(0).getUsageStatus().equals("success")) {
+                    UserDto res = restTemplate.getForObject("http://localhost:8088/user/"+request.getUser().getId(), UserDto.class);
+                    if (res != null){
+                        DecimalFormat f = new DecimalFormat("##.00");
+                        request.getPromotion().setDiscount(10F);
+                        request.getPromotion().setActiveStatus(true);
+                        result.put("eligibility", request.getPromotion().getActiveStatus());
+                        result.put("finalAmount", f.format(request.getTotalAmount()-(request.getTotalAmount()*request.getPromotion().getDiscount()*0.01)));
+                        return ResponseEntity.ok().body(result);
+                    }
+                }
+            }
+
+        }
             result.put("eligibility", false);
             result.put("finalAmount", request.getTotalAmount());
             return ResponseEntity.ok().body(result);
-        }
-        //TODO :check if the promotion status is active
 
-        DecimalFormat f = new DecimalFormat("##.00");
-
-        request.getPromotion().setDiscount(10F);
-        request.getPromotion().setActiveStatus(true);
-        result.put("eligibility", request.getPromotion().getActiveStatus());
-        result.put("finalAmount", f.format(request.getTotalAmount()-(request.getTotalAmount()*request.getPromotion().getDiscount()*0.01)));
-        return ResponseEntity.ok().body(result);
     }
 
     @PostMapping("/promotion")
     public ResponseEntity<PromotionDto> createPromotion(@RequestBody PromotionDto request){
-        PromotionDto promotion = new PromotionDto();
-        promotion.setId(request.getId());
-        promotion.setCode(request.getCode());
-        promotion.setDiscount(request.getDiscount());
-        promotion.setActiveStatus(true);
+        PromotionDto promotion = promotionService.createPromotion(request);
         return ResponseEntity.ok().body(promotion);
     }
 
     @PutMapping("/promotion")
     public ResponseEntity<PromotionDto> updatePromotion(@RequestBody PromotionDto request) {
-        PromotionDto response = new PromotionDto();
-        //TODO: get promotion where id=request.getId();
-        response.setId(request.getId()); //not needed if the data already taken by db
-        response.setCode(request.getCode());
-        response.setDiscount(request.getDiscount());
-        response.setActiveStatus(true);
+        PromotionDto response = promotionService.updatePromotion(request);
         return ResponseEntity.ok().body(response);
     }
 
     @DeleteMapping("/promotion/{id}")
-    public ResponseEntity<UserDto> deletePromotion(@PathVariable(name = "id") String id) {
-        UserDto response = new UserDto();
-        response.setId(id);
-        response.setActiveStatus(false);
+    public ResponseEntity<PromotionDto> deletePromotion(@PathVariable(name = "id") Integer id) {
+        PromotionDto response = promotionService.deletePromotion(id);
         return ResponseEntity.ok().body(response);
     }
 
-    @GetMapping("/promotion")
-    public ResponseEntity<List<PromotionDto>> getAllPromotion(){
-        //TODO: filter only the active one and userId
-        List<PromotionDto> response = getSampleFullPromotion();
+    @GetMapping("/promotion/{userId}")
+    public ResponseEntity<List<PromotionDto>> getAllPromotion(@PathVariable(name = "userId") Integer userId){
+        List<PromotionDto> response = promotionUserRepository.getPromotionByUserIdOrderByDiscount(userId);
         return ResponseEntity.ok().body(response);
     }
 
-    @GetMapping("/promotion/{id}")
-    public ResponseEntity<PromotionDto> getPromotionById(@PathVariable(name = "id") String id){
-        List<PromotionDto> promotions = getSampleFullPromotion();
-        PromotionDto response = new PromotionDto();
-        for (PromotionDto promotion : promotions){
-            if (promotion.getId().equals(id)){
-                response = promotion;
-            }
-        }
+    @GetMapping("/promotion/{code}")
+    public ResponseEntity<PromotionDto> getPromotionByCode(@PathVariable(name = "code") String code){
+        PromotionDto response = promotionRepository.getPromotionByCode(code);
         return ResponseEntity.ok().body(response);
     }
 
     @PostMapping("/promotion/grant")
     public ResponseEntity<PromotionUserDto> grantPromotion(@RequestBody PromotionUserDto request){
-        PromotionUserDto promotionUser = new PromotionUserDto();
-        promotionUser.setPromotion(new PromotionDto(123,"ABC123",(float)30, true,14));
-        promotionUser.setUser(new UserDto("1234", "Juwita", "Pasaribu", "customer", true));
-        promotionUser.setActiveStatus(true);
+        PromotionUserDto promotionUser = promotionService.grantPromotion(request);
         return ResponseEntity.ok().body(promotionUser);
     }
 
     @PostMapping("/promotion/apply")
     public ResponseEntity<PromotionUserDto> applyPromotion(@RequestBody PromotionUserDto request){
-        PromotionUserDto promotionUser = new PromotionUserDto();
-        promotionUser.setPromotion(new PromotionDto(123,"ABC123",(float)30, true,14));
-        promotionUser.setUser(new UserDto("1234", "Juwita", "Pasaribu", "customer", true));
-        promotionUser.setUsageStatus("success");
+        PromotionUserDto promotionUser = promotionService.applyPromotion(request);
         return ResponseEntity.ok().body(promotionUser);
     }
 
-    public List<PromotionDto> getSampleFullPromotion() {
+    /*public List<PromotionDto> getSampleFullPromotion() {
         List<PromotionDto> response = new ArrayList<>();
         PromotionDto promotion1 = new PromotionDto(123,"ABC123",(float)30, true,12);
         PromotionDto promotion2 = new PromotionDto(124,"ABC1234",(float)40, true,13);
@@ -121,5 +114,7 @@ public class PromotionController {
         response.add(promotion3);
         return response;
     }
+
+     */
 
 }

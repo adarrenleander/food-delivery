@@ -1,5 +1,6 @@
 package com.soa.fooddelivery.promotion.entity;
 
+import com.soa.fooddelivery.promotion.dto.PromotionDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,4 +19,8 @@ public class Promotion {
     private Float discount;
     private Integer loyaltyPoint;
     private Boolean activeStatus;
+
+    public PromotionDto convertToDto(){
+        return new PromotionDto(id, code, discount,activeStatus, loyaltyPoint);
+    }
 }
