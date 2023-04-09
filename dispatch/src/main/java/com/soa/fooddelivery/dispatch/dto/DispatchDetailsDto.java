@@ -17,6 +17,8 @@ public class DispatchDetailsDto {
     private String name;
     private String address;
     private String phoneNumber;
+    private String type;
+    private DispatchDto dispatchDto;
 
     public String getName() {
         return name;

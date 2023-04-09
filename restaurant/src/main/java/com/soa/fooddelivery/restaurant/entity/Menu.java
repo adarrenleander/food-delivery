@@ -1,7 +1,6 @@
 package com.soa.fooddelivery.restaurant.entity;
 
 import com.soa.fooddelivery.restaurant.dto.MenuDto;
-import com.soa.fooddelivery.restaurant.dto.RestaurantDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;

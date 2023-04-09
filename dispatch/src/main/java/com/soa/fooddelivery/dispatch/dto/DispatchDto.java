@@ -25,35 +25,35 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DispatchDto {
-    private String orderId;
-    private String dispatchId;  // only used in response
-    private String driverId;
+    private Integer orderId;
+    private Integer dispatchId;  // only used in response
+    private Integer driverId;
     private String status;  // created / finding driver / accepted / on delivery / delivered
     private DispatchDetailsDto restaurant;
     private DispatchDetailsDto receiver;
     private String time;
 
-    public String getOrderId() {
+    public Integer getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(String orderId) {
+    public void setOrderId(Integer orderId) {
         this.orderId = orderId;
     }
 
-    public String getDispatchId() {
+    public Integer getDispatchId() {
         return dispatchId;
     }
 
-    public void setDispatchId(String dispatchId) {
+    public void setDispatchId(Integer dispatchId) {
         this.dispatchId = dispatchId;
     }
 
-    public String getDriverId() {
+    public Integer getDriverId() {
         return driverId;
     }
 
-    public void setDriverId(String driverId) {
+    public void setDriverId(Integer driverId) {
         this.driverId = driverId;
     }
 
