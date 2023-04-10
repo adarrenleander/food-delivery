@@ -13,6 +13,7 @@ public class UserDto {
     private String lastName;
     private String category; //customer,driver
     private Boolean activeStatus;
+    private Integer loyaltyPoints;
 
     public UserDto(Integer id, String firstName, String lastName, String category, Boolean activeStatus) {
         this.id = id;

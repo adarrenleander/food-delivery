@@ -2,9 +2,7 @@ package com.soa.fooddelivery.payment.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 /**
  * {
@@ -19,10 +17,13 @@ import lombok.Setter;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@AllArgsConstructor
+@NoArgsConstructor
 public class TransactionStatusDto {
-    private String transactionId;
+    private Integer transactionId;
+    private Integer userId;
+    private Integer orderId;
     private String transactionType; // payment / refund
-    private String userId;
-    private String orderId;
+    private Float totalAmount;
     private String status; // only used in response -> success / in progress / failed
 }

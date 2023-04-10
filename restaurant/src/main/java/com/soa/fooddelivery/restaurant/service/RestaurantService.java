@@ -24,7 +24,7 @@ public class RestaurantService {
         Restaurant restaurant = restaurantRepository.findAllById(restaurantDto.getId()).get(0);
         restaurant.setName(restaurantDto.getName());
         restaurant.setAddress(restaurantDto.getAddress());
-        restaurant.setPhoneNumber(restaurant.getPhoneNumber());
+        restaurant.setPhoneNumber(restaurantDto.getPhoneNumber());
         restaurantRepository.save(restaurant);
         return restaurant.convertToDto();
     }
@@ -34,7 +34,7 @@ public class RestaurantService {
         Restaurant restaurant = new Restaurant();
         restaurant.setName(restaurantDto.getName());
         restaurant.setAddress(restaurantDto.getAddress());
-        restaurant.setPhoneNumber(restaurant.getPhoneNumber());
+        restaurant.setPhoneNumber(restaurantDto.getPhoneNumber());
         restaurantRepository.save(restaurant);
         return restaurant.convertToDto();
     }

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * {
- *   "notificationId": "xxx",
+ *   "notificationTemplateId": "xxx",
  *   "title": "xxx",
  *   "message": "xxx",
  *   "category": "xxx",
@@ -16,18 +16,18 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class NotificationTemplateDto {
-    private String notificationId;
+    private Integer notificationTemplateId;
     private String title;
     private String message;
     private String category;
     private Boolean active;
 
-    public String getNotificationId() {
-        return notificationId;
+    public Integer getNotificationTemplateId() {
+        return notificationTemplateId;
     }
 
-    public void setNotificationId(String notificationId) {
-        this.notificationId = notificationId;
+    public void setNotificationTemplateId(Integer notificationTemplateId) {
+        this.notificationTemplateId = notificationTemplateId;
     }
 
     public String getTitle() {
@@ -59,6 +59,17 @@ public class NotificationTemplateDto {
     }
 
     public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public NotificationTemplateDto() {
+    }
+
+    public NotificationTemplateDto(Integer notificationTemplateId, String title, String message, String category, Boolean active) {
+        this.notificationTemplateId = notificationTemplateId;
+        this.title = title;
+        this.message = message;
+        this.category = category;
         this.active = active;
     }
 }

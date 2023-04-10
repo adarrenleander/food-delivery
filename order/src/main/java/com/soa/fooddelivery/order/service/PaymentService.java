@@ -1,10 +1,10 @@
 package com.soa.fooddelivery.order.service;
 
 import com.soa.fooddelivery.order.configuration.PaymentConfiguration;
-import com.soa.fooddelivery.order.dto.OrderDto;
 import com.soa.fooddelivery.order.dto.PaymentDto;
 import com.soa.fooddelivery.order.dto.RefundDto;
 import com.soa.fooddelivery.order.dto.TransactionStatusDto;
+import com.soa.fooddelivery.order.entity.Order;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -17,12 +17,12 @@ public class PaymentService {
     @Autowired private PaymentConfiguration paymentConfiguration;
     @Autowired private RestTemplateBuilder restTemplateBuilder;
 
-    public TransactionStatusDto chargePayment(OrderDto order) {
+    public TransactionStatusDto chargePayment(Order order) {
         RestTemplate restTemplate = restTemplateBuilder.build();
         String url = paymentConfiguration.getHost() + paymentConfiguration.getPayPath();
 
         PaymentDto req = new PaymentDto();
-        req.setOrderId(order.getOrderId());
+        req.setOrderId(order.getId());
         req.setUserId(order.getUserId());
         req.setTotalAmount(order.getTotalAmount());
 

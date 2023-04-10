@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 /**
  * {
  *   "userId": "xxx",
- *   "notificationId": "xxx"
+ *   "notificationTemplateId": "xxx"
  * }
  */
 
@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class NotifyDto {
     private Integer userId;
-    private Integer notificationId;
+    private Integer notificationTemplateId;
 
     public Integer getUserId() {
         return userId;
@@ -24,11 +24,11 @@ public class NotifyDto {
         this.userId = userId;
     }
 
-    public Integer getNotificationId() {
-        return notificationId;
+    public Integer getNotificationTemplateId() {
+        return notificationTemplateId;
     }
 
-    public void setNotificationId(Integer notificationId) {
-        this.notificationId = notificationId;
+    public void setNotificationTemplateId(Integer notificationTemplateId) {
+        this.notificationTemplateId = notificationTemplateId;
     }
 }

@@ -16,7 +16,7 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RefundDto {
-    private String transactionId;
-    private String userId;
+    private Integer transactionId;
+    private Integer userId;
     private Float refundAmount;
 }
