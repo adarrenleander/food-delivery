@@ -39,7 +39,7 @@ public class OrderService {
         Order order = saveOrderToDB(request);
         response.setOrderId(order.getId());
 
-        TransactionStatusDto resPay = paymentService.chargePayment(request);
+        TransactionStatusDto resPay = paymentService.chargePayment(order);
         if (resPay.getStatus().equals("failed")) {
             updateOrderStatus(new OrderDto(order.getId(), "failed"));
             response.setStatus("failed");
@@ -47,18 +47,18 @@ public class OrderService {
         }
 
         if (resPromoEligible != null && resPromoEligible.getEligibility()) {
-            PromotionUserDto resPromoApply = promotionService.applyPromotion(request);
+            PromotionUserDto resPromoApply = promotionService.applyPromotion(order);
             if (!resPromoApply.getUsageStatus().equals("success")) {
-                paymentService.refundPayment(resPay.getTransactionId(), request.getUserId(), request.getTotalAmount());
+                paymentService.refundPayment(resPay.getTransactionId(), order.getUserId(), order.getTotalAmount());
                 updateOrderStatus(new OrderDto(order.getId(), "failed"));
                 response.setStatus("failed");
                 return response;
             }
         }
 
-        DispatchDto resDispatch = dispatchService.dispatchOrder(request);
+        DispatchDto resDispatch = dispatchService.dispatchOrder(order);
         if (!resDispatch.getStatus().equals("created")) {
-            paymentService.refundPayment(resPay.getTransactionId(), request.getUserId(), request.getTotalAmount());
+            paymentService.refundPayment(resPay.getTransactionId(), order.getUserId(), order.getTotalAmount());
             updateOrderStatus(new OrderDto(order.getId(), "failed"));
             response.setStatus("failed");
             return response;
@@ -67,7 +67,7 @@ public class OrderService {
         updateOrderStatus(new OrderDto(order.getId(), "placed"));
         response.setStatus("placed");
 
-        notificationService.sendNotification(1, request.getUserId());
+        notificationService.sendNotification(1, order.getUserId());
 
         return response;
     }

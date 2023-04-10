@@ -5,6 +5,7 @@ import com.soa.fooddelivery.order.dto.DispatchDetailsDto;
 import com.soa.fooddelivery.order.dto.DispatchDto;
 import com.soa.fooddelivery.order.dto.OrderDto;
 import com.soa.fooddelivery.order.dto.RestaurantDto;
+import com.soa.fooddelivery.order.entity.Order;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -18,7 +19,7 @@ public class DispatchService {
     @Autowired private RestTemplateBuilder restTemplateBuilder;
     @Autowired private RestaurantService restaurantService;
 
-    public DispatchDto dispatchOrder(OrderDto order) {
+    public DispatchDto dispatchOrder(Order order) {
         RestTemplate restTemplate = restTemplateBuilder.build();
         String url = dispatchConfiguration.getHost() + dispatchConfiguration.getDispatchOrderPath();
 
@@ -34,7 +35,7 @@ public class DispatchService {
         receiver.setPhoneNumber(order.getDelivery().getPhoneNumber());
 
         DispatchDto req = new DispatchDto();
-        req.setOrderId(order.getOrderId());
+        req.setOrderId(order.getId());
         req.setTime(order.getDelivery().getTime());
         req.setRestaurant(restaurant);
         req.setReceiver(receiver);

@@ -2,6 +2,7 @@ package com.soa.fooddelivery.order.service;
 
 import com.soa.fooddelivery.order.configuration.PromotionConfiguration;
 import com.soa.fooddelivery.order.dto.*;
+import com.soa.fooddelivery.order.entity.Order;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -35,7 +36,7 @@ public class PromotionService {
         return res;
     }
 
-    public PromotionUserDto applyPromotion(OrderDto order) {
+    public PromotionUserDto applyPromotion(Order order) {
         RestTemplate restTemplate = restTemplateBuilder.build();
         String url = promotionConfiguration.getHost() + promotionConfiguration.getApplyPath();
 
