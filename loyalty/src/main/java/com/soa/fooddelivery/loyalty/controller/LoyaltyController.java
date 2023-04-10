@@ -16,7 +16,6 @@ public class LoyaltyController {
     @Autowired
     LoyaltyRepository loyaltyRepository;
 
-
     @PostMapping("/loyalty")
     public ResponseEntity<LoyaltyDto> createUser(@RequestBody LoyaltyDto request) {
         LoyaltyDto response = loyaltyService.createLoyalty(request);

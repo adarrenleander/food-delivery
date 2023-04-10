@@ -1,8 +1,8 @@
 package com.soa.fooddelivery.dispatch.entity;
 
 import com.soa.fooddelivery.dispatch.dto.DispatchDto;
-import com.soa.fooddelivery.dispatch.repository.DispatchRepository;
-import jakarta.persistence.*;
+
+import javax.persistence.*;
 
 @Entity
 @Table

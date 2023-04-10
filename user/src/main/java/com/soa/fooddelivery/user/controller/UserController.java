@@ -4,7 +4,6 @@ import com.soa.fooddelivery.user.dto.UserDto;
 import com.soa.fooddelivery.user.repository.UserRepository;
 import com.soa.fooddelivery.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +17,6 @@ public class UserController {
 
     @Autowired
     UserRepository userRepository;
-
 
     @PostMapping("/user")
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto request) {
@@ -39,9 +37,26 @@ public class UserController {
     }
 
     @GetMapping("/user/{id}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable(name = "id") Integer id){
-        UserDto response = userRepository.findDtoById(id);
+    public ResponseEntity<UserDto> getUserById(@PathVariable(name = "id") Integer id) {
+        UserDto response = userService.getUserById(id);
         return ResponseEntity.ok().body(response);
     }
 
+    @GetMapping("/drivers")
+    public ResponseEntity<List<UserDto>> getAvailableDrivers() {
+        List<UserDto> response = userRepository.findAvailableDrivers();
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PostMapping("/driver/{driverId}/available")
+    public ResponseEntity<UserDto> setDriverAvailable(@PathVariable Integer driverId) {
+        UserDto response = userService.setDriverAvailability(driverId, true);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PostMapping("/driver/{driverId}/unavailable")
+    public ResponseEntity<UserDto> setDriverUnavailable(@PathVariable Integer driverId) {
+        UserDto response = userService.setDriverAvailability(driverId, false);
+        return ResponseEntity.ok().body(response);
+    }
 }

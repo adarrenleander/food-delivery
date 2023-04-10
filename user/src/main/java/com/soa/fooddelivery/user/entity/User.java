@@ -18,10 +18,11 @@ public class User {
     private Integer id;
     private String firstName;
     private String lastName;
-    private String category; //customer,driver
+    private String category; // customer,driver
     private Boolean activeStatus;
+    private Boolean isAvailable; // only for driver
 
     public UserDto convertToDto(){
-        return new UserDto(id, firstName, lastName, category, activeStatus);
+        return new UserDto(id, firstName, lastName, category, activeStatus, isAvailable);
     }
 }

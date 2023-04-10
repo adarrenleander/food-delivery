@@ -13,7 +13,7 @@ public class TrackingController {
     @Autowired private TrackingService trackingService;
 
     @GetMapping("/dispatch/{dispatchId}/track")
-    public ResponseEntity<OrderTrackingDto> getOrderTracking(@PathVariable(name = "dispatchId") String dispatchId) {
+    public ResponseEntity<OrderTrackingDto> getOrderTracking(@PathVariable(name = "dispatchId") Integer dispatchId) {
         log.debug("GET /dispatch/{dispatchId}/track getOrderTracking");
         OrderTrackingDto response = trackingService.getOrderTracking(dispatchId);
         return ResponseEntity.ok().body(response);

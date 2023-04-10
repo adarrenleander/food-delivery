@@ -13,11 +13,8 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class UserService {
 
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    private RestTemplateBuilder restTemplateBuilder;
+    @Autowired UserRepository userRepository;
+    @Autowired LoyaltyService loyaltyService;
 
     @Transactional(rollbackFor={Exception.class})
     public UserDto deleteUser (Integer id){
@@ -29,17 +26,22 @@ public class UserService {
 
     @Transactional(rollbackFor = {Exception.class})
     public UserDto createUser(UserDto userDto){
-        RestTemplate restTemplate = restTemplateBuilder.build();
+
         User user = new User();
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user.setActiveStatus(true);
         user.setCategory(userDto.getCategory());
+        if (user.getCategory().equals("driver")) {
+            user.setIsAvailable(true);
+        }
         user = userRepository.save(user);
-        LoyaltyDto req = new LoyaltyDto();
-        req.setUser(user.convertToDto());
-//        LoyaltyDto res = restTemplate.postForObject("http://localhost:8081/loyalty", req, LoyaltyDto.class);
-        return user.convertToDto();
+        userDto = user.convertToDto();
+
+        LoyaltyDto loyalty = loyaltyService.createLoyaltyUser(user);
+        userDto.setLoyaltyPoints(loyalty.getLoyaltyPoint());
+
+        return userDto;
     }
 
     @Transactional(rollbackFor = {Exception.class})
@@ -48,6 +50,26 @@ public class UserService {
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user.setCategory(userDto.getCategory());
+        if (user.getCategory().equals("driver")) {
+            user.setIsAvailable(userDto.getIsAvailable());
+        }
+        userRepository.save(user);
+        return user.convertToDto();
+    }
+
+    public UserDto getUserById(Integer id) {
+        UserDto userDto = userRepository.findDtoById(id);
+
+        LoyaltyDto loyalty = loyaltyService.getLoyaltyUser(id);
+        userDto.setLoyaltyPoints(loyalty.getLoyaltyPoint());
+
+        return userDto;
+    }
+
+    @Transactional(rollbackFor = {Exception.class})
+    public UserDto setDriverAvailability(Integer driverId, Boolean availability) {
+        User user = userRepository.findAllById(driverId).get(0);
+        user.setIsAvailable(availability);
         userRepository.save(user);
         return user.convertToDto();
     }

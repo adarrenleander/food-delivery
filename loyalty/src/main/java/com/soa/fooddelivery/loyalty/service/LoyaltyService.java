@@ -65,18 +65,4 @@ public class LoyaltyService {
         res.setLoyaltyPoint(loyalty.getLoyaltyPoint());
         return res;
     }
-
-  /*  public LoyaltyDto getLoyalty(Integer userId) {
-        // TODO: query from DB based on userId
-
-        LoyaltyDto res = new LoyaltyDto();
-        UserDto user = new UserDto();
-        user.setId(userId);
-        res.setUser(user);
-        res.setLoyaltyPoint(24);
-
-        return res;
-    }
-
-   */
 }

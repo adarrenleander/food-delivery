@@ -15,8 +15,9 @@ public interface UserRepository extends CrudRepository<User, String> {
     List<User> findAllById(@Param("id") Integer id);
 
 
-    @Query("SELECT new com.soa.fooddelivery.user.dto.UserDto(u.id, u.firstName, u.lastName, u.category, u.activeStatus) FROM User u WHERE u.activeStatus = true and u.id=:id")
+    @Query("SELECT new com.soa.fooddelivery.user.dto.UserDto(u.id, u.firstName, u.lastName, u.category, u.activeStatus, u.isAvailable) FROM User u WHERE u.activeStatus = true and u.id=:id")
     UserDto findDtoById(@Param("id") Integer id);
 
-
+    @Query("SELECT new com.soa.fooddelivery.user.dto.UserDto(u.id, u.firstName, u.lastName, u.category, u.activeStatus, u.isAvailable) FROM User u WHERE u.category = 'driver' and u.activeStatus = true and u.isAvailable = true")
+    List<UserDto> findAvailableDrivers();
 }

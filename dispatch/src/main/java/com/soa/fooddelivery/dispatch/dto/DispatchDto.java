@@ -32,6 +32,15 @@ public class DispatchDto {
     private DispatchDetailsDto restaurant;
     private DispatchDetailsDto receiver;
     private String time;
+    private String trackingUrl;
+
+    public String getTrackingUrl() {
+        return trackingUrl;
+    }
+
+    public void setTrackingUrl(String trackingUrl) {
+        this.trackingUrl = trackingUrl;
+    }
 
     public Integer getOrderId() {
         return orderId;

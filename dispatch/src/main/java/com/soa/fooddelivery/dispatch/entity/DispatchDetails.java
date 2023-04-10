@@ -1,6 +1,6 @@
 package com.soa.fooddelivery.dispatch.entity;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity
 @Table

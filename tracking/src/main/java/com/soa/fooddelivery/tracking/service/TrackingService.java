@@ -8,14 +8,14 @@ import org.springframework.stereotype.Service;
 public class TrackingService {
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(TrackingService.class);
 
-    public OrderTrackingDto getOrderTracking(String dispatchId) {
+    public OrderTrackingDto getOrderTracking(Integer dispatchId) {
         // the order tracking is integrated with a third-party provider
         // who can provide a url for a live map
         // this implementation is outside the scope of this project
 
         OrderTrackingDto res = new OrderTrackingDto();
         res.setDispatchId(dispatchId);
-        res.setTrackingURL("https://www.google.com");
+        res.setTrackingUrl("https://www.google.com");
 
         return res;
     }
