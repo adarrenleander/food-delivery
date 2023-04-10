@@ -1,18 +1,18 @@
 package com.soa.fooddelivery.dispatch.entity;
 
-import com.soa.fooddelivery.dispatch.dto.DispatchDto;
-import com.soa.fooddelivery.dispatch.repository.DispatchRepository;
 import jakarta.persistence.*;
 
 @Entity
 @Table
-public class Dispatch {
+public class DispatchDetails {
 
     @Id
     @Column(unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private Integer orderId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
+    private Dispatch dispatch;
     private Integer driverId;
     private String status;
     private String time;
@@ -25,12 +25,12 @@ public class Dispatch {
         this.id = id;
     }
 
-    public Integer getOrderId() {
-        return orderId;
+    public Dispatch getDispatch() {
+        return dispatch;
     }
 
-    public void setOrderId(Integer orderId) {
-        this.orderId = orderId;
+    public void setDispatch(Dispatch dispatch) {
+        this.dispatch = dispatch;
     }
 
     public Integer getDriverId() {
@@ -55,10 +55,5 @@ public class Dispatch {
 
     public void setTime(String time) {
         this.time = time;
-    }
-
-
-    public DispatchDto convertToDto(){
-        return new DispatchDto(id, orderId, driverId, status, time);
     }
 }

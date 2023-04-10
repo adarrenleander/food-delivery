@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class LoyaltyService {
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(LoyaltyService.class);
 
+    @Autowired
     LoyaltyRepository loyaltyRepository;
 
     @Autowired

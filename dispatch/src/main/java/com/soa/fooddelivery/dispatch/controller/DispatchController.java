@@ -20,14 +20,14 @@ public class DispatchController {
     }
 
     @PostMapping("/dispatch/{dispatchId}/accept")
-    public ResponseEntity<DispatchDto> acceptDispatch(@PathVariable(name = "dispatchId") String dispatchId) {
+    public ResponseEntity<DispatchDto> acceptDispatch(@PathVariable(name = "dispatchId") Integer dispatchId) {
         log.debug("POST /dispatch/{dispatchId}/accept acceptDispatch");
         DispatchDto response = dispatchService.acceptDispatch(dispatchId);
         return ResponseEntity.ok().body(response);
     }
 
     @PostMapping("/dispatch/{dispatchId}/reject")
-    public ResponseEntity<DispatchDto> rejectDispatch(@PathVariable(name = "dispatchId") String dispatchId) {
+    public ResponseEntity<DispatchDto> rejectDispatch(@PathVariable(name = "dispatchId") Integer dispatchId) {
         log.debug("POST /dispatch/{dispatchId}/reject rejectDispatch");
         DispatchDto response = dispatchService.rejectDispatch(dispatchId);
         return ResponseEntity.ok().body(response);
@@ -41,7 +41,7 @@ public class DispatchController {
     }
 
     @GetMapping("/dispatch/{dispatchId}/status")
-    public ResponseEntity<DispatchDto> getDispatchStatus(@PathVariable(name = "dispatchId") String dispatchId) {
+    public ResponseEntity<DispatchDto> getDispatchStatus(@PathVariable(name = "dispatchId") Integer dispatchId) {
         log.debug("GET /dispatch/{dispatchId}/status");
         DispatchDto response = dispatchService.getDispatchStatus(dispatchId);
         return ResponseEntity.ok().body(response);

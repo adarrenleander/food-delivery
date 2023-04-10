@@ -1,7 +1,6 @@
 package com.soa.fooddelivery.loyalty.entity;
 
 import com.soa.fooddelivery.loyalty.dto.LoyaltyDto;
-import com.soa.fooddelivery.loyalty.dto.PromotionDto;
 import com.soa.fooddelivery.loyalty.dto.UserDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;

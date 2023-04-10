@@ -88,4 +88,15 @@ public class DispatchDto {
     public void setTime(String time) {
         this.time = time;
     }
+
+    public DispatchDto(Integer dispatchId,Integer orderId,  Integer driverId, String status, String time) {
+        this.orderId = orderId;
+        this.dispatchId = dispatchId;
+        this.driverId = driverId;
+        this.status = status;
+        this.time = time;
+    }
+
+    public DispatchDto() {
+    }
 }
