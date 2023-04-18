@@ -17,6 +17,7 @@ public class DispatchService {
     @Autowired private DispatchRepository dispatchRepository;
     @Autowired private TrackingService trackingService;
     @Autowired private UserService userService;
+    @Autowired private OrderService orderService;
 
     public DispatchDto dispatchOrder(DispatchDto dispatchDto) {
         Dispatch dispatch = new Dispatch();
@@ -38,6 +39,7 @@ public class DispatchService {
         Dispatch dispatch = dispatchRepository.findAllById(dispatchId).get(0);
         dispatch.setStatus("accepted");
         dispatch = dispatchRepository.save(dispatch);
+        orderService.updateOrderStatus(dispatch.getOrderId(), "on delivery");
 
         return dispatch.convertToDto();
     }
@@ -61,6 +63,7 @@ public class DispatchService {
 
         if (dispatch.getStatus().equals("completed")) {
             userService.setDriverAvailable(dispatch.getDriverId());
+            orderService.updateOrderStatus(dispatch.getOrderId(), "completed");
         }
 
         return dispatch.convertToDto();

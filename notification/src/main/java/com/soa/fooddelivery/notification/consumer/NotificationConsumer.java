@@ -22,7 +22,7 @@ public class NotificationConsumer {
     @Autowired private NotificationTemplateRepository notificationTemplateRepository;
 
     @JmsListener(destination = "${mq.topic.send-notification}")
-    public void receiveOrderPlaced(String message) {
+    public void sendNotification(String message) {
         ObjectMapper mapper = new ObjectMapper();
         NotificationDto notificationDto;
         try {
