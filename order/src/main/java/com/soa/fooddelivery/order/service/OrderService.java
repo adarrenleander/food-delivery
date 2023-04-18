@@ -9,6 +9,7 @@ import com.soa.fooddelivery.order.repository.OrderItemRepository;
 import com.soa.fooddelivery.order.repository.OrderRepository;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,7 @@ public class OrderService {
     @Autowired private OrderRepository orderRepository;
     @Autowired private DeliveryRepository deliveryRepository;
     @Autowired private OrderItemRepository orderItemRepository;
+    @Value("${notification.orderPlaced}") private Integer notificationTemplateOrderPlaced;
 
     public OrderDto createOrder(OrderDto request) {
         OrderDto response = new OrderDto();
@@ -67,7 +69,7 @@ public class OrderService {
         updateOrderStatus(new OrderDto(order.getId(), "placed"));
         response.setStatus("placed");
 
-        notificationService.sendNotification(1, order.getUserId());
+        notificationService.sendNotification(notificationTemplateOrderPlaced, order.getUserId());
 
         return response;
     }
