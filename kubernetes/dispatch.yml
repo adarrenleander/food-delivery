@@ -1,4 +1,17 @@
 apiVersion: v1
+kind: Service
+metadata:
+  name: dispatch
+  namespace: food-delivery
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: dispatch
+---
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: dispatch
@@ -15,19 +28,6 @@ spec:
     spec:
       containers:
         - name: dispatch
-          image: food-delivery/dispatch:latest
+          image: adarrenleander/fooddelivery-dispatch:latest
           ports:
             - containerPort: 8080
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: dispatch
-  namespace: food-delivery
-spec:
-  type: LoadBalancer
-  ports:
-    - port: 8080
-      targetPort: 8080
-  selector:
-    app: dispatch

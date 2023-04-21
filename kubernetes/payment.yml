@@ -1,4 +1,17 @@
 apiVersion: v1
+kind: Service
+metadata:
+  name: payment
+  namespace: food-delivery
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8084
+      targetPort: 8084
+  selector:
+    app: payment
+---
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: payment
@@ -15,19 +28,6 @@ spec:
     spec:
       containers:
         - name: payment
-          image: food-delivery/payment:latest
+          image: adarrenleander/fooddelivery-payment:latest
           ports:
             - containerPort: 8084
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: payment
-  namespace: food-delivery
-spec:
-  type: LoadBalancer
-  ports:
-    - port: 8084
-      targetPort: 8084
-  selector:
-    app: payment

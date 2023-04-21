@@ -1,4 +1,17 @@
 apiVersion: v1
+kind: Service
+metadata:
+  name: tracking
+  namespace: food-delivery
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8087
+      targetPort: 8087
+  selector:
+    app: tracking
+---
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: tracking
@@ -15,19 +28,6 @@ spec:
     spec:
       containers:
         - name: tracking
-          image: food-delivery/tracking:latest
+          image: adarrenleander/fooddelivery-tracking:latest
           ports:
             - containerPort: 8087
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: tracking
-  namespace: food-delivery
-spec:
-  type: LoadBalancer
-  ports:
-    - port: 8087
-      targetPort: 8087
-  selector:
-    app: tracking

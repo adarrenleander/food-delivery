@@ -1,4 +1,17 @@
 apiVersion: v1
+kind: Service
+metadata:
+  name: activemq
+  namespace: food-delivery
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 61616
+      targetPort: 61616
+  selector:
+    app: activemq
+---
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: activemq
@@ -18,16 +31,3 @@ spec:
           image: symptoma/activemq:latest
           ports:
             - containerPort: 61616
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: activemq
-  namespace: food-delivery
-spec:
-  type: LoadBalancer
-  ports:
-    - port: 61616
-      targetPort: 61616
-  selector:
-    app: activemq

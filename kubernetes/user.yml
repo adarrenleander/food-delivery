@@ -1,4 +1,17 @@
 apiVersion: v1
+kind: Service
+metadata:
+  name: user
+  namespace: food-delivery
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8088
+      targetPort: 8088
+  selector:
+    app: user
+---
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: user
@@ -15,19 +28,6 @@ spec:
     spec:
       containers:
         - name: user
-          image: food-delivery/user:latest
+          image: adarrenleander/fooddelivery-user:latest
           ports:
             - containerPort: 8088
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: user
-  namespace: food-delivery
-spec:
-  type: LoadBalancer
-  ports:
-    - port: 8088
-      targetPort: 8088
-  selector:
-    app: user
